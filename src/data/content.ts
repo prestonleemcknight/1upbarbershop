@@ -48,7 +48,7 @@ export const faqs: Faq[] = [
     q: 'How do I book an appointment?',
     a: bookingReady
       ? 'Use the Book Appointment button anywhere on this page. It opens our online booking, where you can pick your barber, service and time.'
-      : `Call or text the shop at ${business.phoneDisplay} and we will get you on the books. Online booking is coming soon.`,
+      : `Call or text the shop at ${business.phoneDisplay} and we will get you on the books.`,
   },
   {
     q: 'What if I show up late?',
