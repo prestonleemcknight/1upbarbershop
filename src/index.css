@@ -39,6 +39,13 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* Desktop adds the utility strip above the nav row. */
+  @media (min-width: 64rem) {
+    html {
+      scroll-padding-top: 7.75rem;
+    }
+  }
+
   body {
     background-color: var(--color-ink);
     color: var(--color-bone);

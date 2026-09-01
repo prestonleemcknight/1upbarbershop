@@ -4,14 +4,34 @@ import { BookButton, buttonPrimary } from './ui';
 import { CloseIcon, PhoneIcon } from './Icons';
 import { Logo } from './Logo';
 
-const navLinks = [
+/** Split either side of the centred mark, three and three. */
+const navLeft = [
   { href: '#services', label: 'Services' },
   { href: '#barbers', label: 'Barbers' },
   { href: '#gallery', label: 'Gallery' },
+];
+
+const navRight = [
   { href: '#reviews', label: 'Reviews' },
   { href: '#location', label: 'Location' },
   { href: '#faq', label: 'FAQ' },
 ];
+
+const allLinks = [...navLeft, ...navRight];
+
+const linkClass =
+  'inline-flex min-h-[44px] items-center rounded-[4px] px-3 text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted transition-colors hover:text-bone';
+
+/** The centred mark, used by both the desktop and the mobile row. */
+function Brand({ className = '' }: { className?: string }) {
+  return (
+    <a href="#top" className={`group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone ${className}`}>
+      <Logo className="h-10 w-10 shrink-0" />
+      <span className="sr-only">1UP</span>{' '}
+      <span className="hidden text-[0.95rem] font-extrabold uppercase tracking-[0.14em] sm:block">Barbershop</span>
+    </a>
+  );
+}
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -58,57 +78,72 @@ export function Header() {
         scrolled || open ? 'border-hairline bg-ink/95 backdrop-blur-md' : 'border-transparent bg-ink/70 backdrop-blur-sm'
       }`}
     >
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
-        {/* Accessible name is built from the visible text, so voice control matches what people see. */}
-        <a href="#top" className="group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone">
-          <Logo className="h-10 w-10 shrink-0" />
-          <span className="sr-only">1UP</span>{' '}
-          <span className="hidden text-[0.95rem] font-extrabold uppercase tracking-[0.14em] sm:block">
-            Barbershop
-          </span>
-        </a>
+      {/* Utility strip. Keeps the phone reachable without crowding the nav row.
+          Desktop only — on mobile the sticky bottom bar already carries Call. */}
+      <div className="hidden border-b border-hairline/60 lg:block">
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-6 px-8 text-[0.72rem] font-bold uppercase tracking-[0.14em]">
+          <p className="text-muted">
+            Walk-ins welcome <span className="mx-2 text-hairline">·</span> Open 7 days a week
+          </p>
+          <a href={business.phoneHref} className="inline-flex items-center gap-2 text-bone transition-colors hover:text-brand-lift">
+            <PhoneIcon className="h-[15px] w-[15px]" />
+            {business.phoneDisplay}
+          </a>
+        </div>
+      </div>
 
-        <nav aria-label="Primary" className="hidden lg:block">
+      {/* Desktop: nav split either side of the centred mark. */}
+      <nav aria-label="Primary" className="mx-auto hidden max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-6 px-8 lg:grid">
+        <ul className="flex items-center justify-start gap-1">
+          {navLeft.map((link) => (
+            <li key={link.href}>
+              <a href={link.href} className={linkClass}>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex h-[72px] items-center justify-center">
+          <Brand />
+        </div>
+
+        <div className="flex items-center justify-end gap-1">
           <ul className="flex items-center gap-1">
-            {navLinks.map((link) => (
+            {navRight.map((link) => (
               <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="inline-flex min-h-[44px] items-center rounded-[4px] px-3 text-[0.82rem] font-semibold uppercase tracking-[0.12em] text-muted transition-colors hover:text-bone"
-                >
+                <a href={link.href} className={linkClass}>
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <a
-            href={business.phoneHref}
-            className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-[4px] px-3 text-[0.85rem] font-semibold text-muted transition-colors hover:text-bone md:inline-flex"
+          <BookButton
+            className={`${buttonPrimary} ml-2 !px-5 !text-[0.8rem] whitespace-nowrap`}
+            withArrow={false}
+            label={bookLabel}
           >
-            <PhoneIcon className="h-[18px] w-[18px]" />
-            <span className="hidden xl:inline">{business.phoneDisplay}</span>
-            <span className="sr-only xl:hidden">Call {business.name} at {business.phoneDisplay}</span>
-          </a>
+            Book
+          </BookButton>
+        </div>
+      </nav>
 
-          {/* Wrapped rather than class-toggled: the shared button style sets its own
-              display, which would win over a bare `hidden` utility. Below sm the
-              sticky bottom bar already carries this action. */}
+      {/* Mobile: mark left, actions right. */}
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:hidden">
+        <Brand />
+        <div className="flex items-center gap-2">
           <span className="hidden sm:block">
             <BookButton className={`${buttonPrimary} !px-5 !text-[0.8rem]`} withArrow={false}>
               {bookLabel}
             </BookButton>
           </span>
-
           <button
             ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] border border-hairline text-bone lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] border border-hairline text-bone"
           >
             <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
             {open ? (
@@ -122,15 +157,10 @@ export function Header() {
         </div>
       </div>
 
-      <div
-        id="mobile-menu"
-        ref={panelRef}
-        hidden={!open}
-        className="border-t border-hairline bg-ink lg:hidden"
-      >
+      <div id="mobile-menu" ref={panelRef} hidden={!open} className="border-t border-hairline bg-ink lg:hidden">
         <nav aria-label="Mobile" className="mx-auto max-w-7xl px-5 py-3 sm:px-8">
           <ul className="flex flex-col">
-            {navLinks.map((link) => (
+            {allLinks.map((link) => (
               <li key={link.href} className="border-b border-hairline/60 last:border-0">
                 <a
                   href={link.href}
