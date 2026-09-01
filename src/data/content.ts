@@ -5,17 +5,6 @@
  */
 import { business, policies, bookingReady } from './business';
 
-export type TrustFact = { label: string; detail: string; icon: 'walkin' | 'calendar' | 'clock' | 'pin' | 'scissors' };
-
-/** Only facts that were actually confirmed for the shop appear here. */
-export const trustFacts: TrustFact[] = [
-  { label: 'Walk-ins welcome', detail: 'No appointment needed', icon: 'walkin' },
-  { label: 'Open 7 days', detail: 'Mon–Sun, every week', icon: 'clock' },
-  { label: 'Appointments available', detail: bookingReady ? 'Book online in seconds' : 'Call to reserve a chair', icon: 'calendar' },
-  { label: 'On W Loop 1604 N', detail: `${business.neighborhood}, San Antonio`, icon: 'pin' },
-  { label: 'All hair types', detail: 'Fades, locs, kids, beards', icon: 'scissors' },
-];
-
 export type Differentiator = { title: string; body: string };
 
 export const differentiators: Differentiator[] = [
