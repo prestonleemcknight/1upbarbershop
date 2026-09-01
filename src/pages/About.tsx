@@ -1,5 +1,6 @@
 import { Section, SectionHeading } from '../components/ui';
 import { business } from '../data/business';
+import { FeedbackForm } from '../components/FeedbackForm';
 
 const points = [
   'Barbers who cut every day and finish every head the same way',
@@ -50,6 +51,17 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
+
+        <div className="mt-20 border-t border-hairline pt-14">
+          <h3 className="display-xl text-[clamp(1.5rem,4vw,2.2rem)]">Recommendations / Improvements for our 1UP</h3>
+          <p className="mt-4 max-w-2xl text-[1.02rem] leading-relaxed text-muted">
+            Sat in the chair and thought of something we could do better? Tell us. Good or bad, it goes straight to
+            the owners.
+          </p>
+          <div className="mt-8">
+            <FeedbackForm />
+          </div>
+        </div>
       </div>
     </Section>
   );

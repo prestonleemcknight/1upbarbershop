@@ -262,6 +262,8 @@ export type Barber = {
   instagram: string;
   /** Direct number. Empty = falls back to the shop line. */
   phone?: string;
+  /** Direct email. Empty = falls back to the shop address. */
+  email?: string;
   /** Marks a stand-in profile so the UI can label it honestly. */
   demo?: boolean;
 };

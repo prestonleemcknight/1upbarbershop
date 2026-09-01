@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   chairRoster,
   chairHotspots,
@@ -9,42 +9,47 @@ import {
   bookingReady,
 } from '../data/business';
 import { asset } from '../lib/asset';
-import { EditorNote, Reveal } from './ui';
 import { PhoneIcon } from './Icons';
 
-/** The shop photo the markers sit on. Optional — the list below works without it. */
 const SHOP_PHOTO = '/images/1up-barbershop-chairs.jpg';
 const SHOP_PHOTO_WEBP = '/images/1up-barbershop-chairs.webp';
 
-function ChairIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} fill="none" aria-hidden focusable="false">
-      <rect x="14" y="5" width="20" height="7" rx="2.5" fill="currentColor" opacity="0.9" />
-      <rect x="12" y="14" width="24" height="13" rx="3" fill="currentColor" />
-      <rect x="7" y="21" width="6" height="4" rx="2" fill="currentColor" opacity="0.75" />
-      <rect x="35" y="21" width="6" height="4" rx="2" fill="currentColor" opacity="0.75" />
-      <rect x="21.5" y="27" width="5" height="10" rx="1.5" fill="currentColor" opacity="0.8" />
-      <path d="M13 43c0-3.3 4.9-6 11-6s11 2.7 11 6z" fill="currentColor" opacity="0.65" />
-    </svg>
-  );
-}
+/** Half the popover width, used to keep it inside the photo at either edge. */
+const POP_HALF = '8.5rem';
 
 export function ChairPicker() {
   const [selected, setSelected] = useState<number | null>(null);
   const [hasPhoto, setHasPhoto] = useState(true);
   const active = selected === null ? null : chairRoster[selected];
 
+  // Escape closes the open card.
+  useEffect(() => {
+    if (selected === null) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setSelected(null);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [selected]);
+
+  if (!hasPhoto) {
+    return (
+      <p className="rounded-[6px] border border-dashed border-hairline bg-ink-2 px-5 py-8 text-center text-muted">
+        Shop photo not found. Add it at <code>{SHOP_PHOTO}</code> to show the team.
+      </p>
+    );
+  }
+
   return (
     <div>
-      {/* The photo, with a marker on each barber. */}
-      {hasPhoto && (
-        <div className="relative isolate overflow-hidden rounded-[6px] border border-hairline bg-ink-2">
+      {/* On a phone the photo scrolls sideways at a wider size, so the two
+          closest pairs of barbers do not collapse into one tap target. */}
+      <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:overflow-visible sm:px-0">
+        <div className="relative isolate w-[780px] overflow-hidden rounded-[6px] border border-hairline bg-ink-2 sm:w-full">
           <picture>
             <source srcSet={asset(SHOP_PHOTO_WEBP)} type="image/webp" />
             <img
               src={asset(SHOP_PHOTO)}
               onError={() => setHasPhoto(false)}
-              alt="The floor at 1UP Barbershop — the team at their chairs"
+              alt="The team at 1UP Barbershop, at their chairs"
               width={2000}
               height={1116}
               loading="lazy"
@@ -53,9 +58,6 @@ export function ChairPicker() {
             />
           </picture>
 
-          {/* Markers sit on faces, so they are rings until picked — the face
-              stays visible through them. Hidden on the narrowest screens,
-              where they would overlap; the list below is the target there. */}
           {chairRoster.map((barber, i) => {
             const spot = chairHotspots[i];
             if (!spot) return null;
@@ -66,11 +68,10 @@ export function ChairPicker() {
                 type="button"
                 onClick={() => setSelected(isOpen ? null : i)}
                 aria-expanded={isOpen}
-                aria-controls="chair-detail"
                 style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                className={`absolute hidden h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[0.7rem] font-extrabold shadow-[0_2px_10px_rgba(0,0,0,0.5)] transition-all hover:z-20 hover:scale-125 focus-visible:z-20 focus-visible:scale-125 sm:flex lg:h-9 lg:w-9 lg:text-[0.8rem] ${
+                className={`absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[0.7rem] font-extrabold shadow-[0_2px_10px_rgba(0,0,0,0.5)] transition-all hover:z-30 hover:scale-125 focus-visible:z-30 focus-visible:scale-125 lg:h-9 lg:w-9 lg:text-[0.8rem] ${
                   isOpen
-                    ? 'z-20 scale-125 border-white bg-brand text-white'
+                    ? 'z-30 scale-125 border-white bg-brand text-white'
                     : 'z-10 border-white/90 bg-ink/35 text-white backdrop-blur-[1px] hover:bg-brand'
                 }`}
               >
@@ -79,98 +80,80 @@ export function ChairPicker() {
               </button>
             );
           })}
-        </div>
-      )}
 
-      {/* The same ten chairs as a list. Works without the photo, and is the
-          reliable target on a phone where the markers get tight. */}
-      <div className="mt-4 rounded-[6px] border border-hairline bg-ink-2 px-5 py-8 sm:px-8">
-        <p className="eyebrow mb-6 text-center text-muted">
-          {hasPhoto ? 'Or pick a chair from the list' : 'Tap a chair to meet the barber'}
-        </p>
-
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {chairRoster.map((barber, i) => {
-            const isOpen = selected === i;
-            return (
-              <li key={i}>
+          {/* The card, anchored under its marker and clamped inside the photo. */}
+          {active && selected !== null && (
+            <div
+              role="dialog"
+              aria-label={`${active.name} details`}
+              style={{
+                left: `clamp(${POP_HALF}, ${chairHotspots[selected].x}%, calc(100% - ${POP_HALF}))`,
+                top: `calc(${chairHotspots[selected].y}% + 1.6rem)`,
+              }}
+              className="absolute z-40 w-[17rem] -translate-x-1/2 rounded-[6px] border border-brand/60 bg-ink/95 p-4 shadow-[0_10px_40px_rgba(0,0,0,0.65)] backdrop-blur-md"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-brand-lift">
+                    Chair {selected + 1}
+                  </p>
+                  <p className="mt-0.5 truncate text-[1.05rem] font-extrabold text-bone">{active.name}</p>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setSelected(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  aria-controls="chair-detail"
-                  className={`flex w-full flex-col items-center gap-2 rounded-[5px] border px-2 py-4 transition-colors ${
-                    isOpen
-                      ? 'border-brand bg-brand/15 text-brand-lift'
-                      : 'border-hairline bg-ink/50 text-muted hover:border-brand-lift/60 hover:text-bone'
-                  }`}
+                  onClick={() => setSelected(null)}
+                  aria-label="Close"
+                  className="-mr-1 -mt-1 shrink-0 rounded p-1 text-muted transition-colors hover:text-bone"
                 >
-                  <ChairIcon className="h-9 w-9" />
-                  <span className="text-[0.7rem] font-bold uppercase tracking-[0.12em]">Chair {i + 1}</span>
-                  <span className="text-[0.82rem] font-semibold text-bone">{barber.name}</span>
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden focusable="false">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+                  </svg>
                 </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      {/* Detail panel — same content whichever way the barber was picked. */}
-      <div id="chair-detail" hidden={!active} className="mt-4">
-        {active && (
-          <Reveal className="rounded-[6px] border border-brand/40 bg-ink-2 p-6 sm:p-8">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="eyebrow text-brand-lift">Chair {(selected ?? 0) + 1}</p>
-                <h3 className="display-xl mt-1 text-[clamp(1.5rem,4vw,2.1rem)]">{active.name}</h3>
-                {active.specialty && <p className="mt-2 text-[0.95rem] text-muted">{active.specialty}</p>}
               </div>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className="rounded-[4px] border border-hairline px-3 py-2 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-muted hover:text-bone"
-              >
-                Close
-              </button>
-            </div>
 
-            {active.bio && <p className="mt-4 max-w-prose text-[0.98rem] leading-relaxed text-bone-2">{active.bio}</p>}
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <a
-                href={active.phone ? `tel:${active.phone}` : business.phoneHref}
-                className="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-[4px] border border-hairline text-[0.85rem] font-bold uppercase tracking-[0.08em] text-bone hover:border-brand-lift hover:text-brand-lift"
-              >
-                <PhoneIcon className="h-[17px] w-[17px]" />
-                {active.phone ?? business.phoneDisplay}
-              </a>
+              <dl className="mt-3 space-y-2 border-t border-hairline pt-3 text-[0.82rem]">
+                <div>
+                  <dt className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-muted">Phone</dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href={active.phone ? `tel:${active.phone}` : business.phoneHref}
+                      className="inline-flex items-center gap-1.5 font-semibold text-bone hover:text-brand-lift"
+                    >
+                      <PhoneIcon className="h-[14px] w-[14px]" />
+                      {active.phone ?? business.phoneDisplay}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-muted">Email</dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href={`mailto:${active.email ?? business.email}`}
+                      className="break-all font-semibold text-bone hover:text-brand-lift"
+                    >
+                      {active.email ?? business.email}
+                    </a>
+                  </dd>
+                </div>
+              </dl>
 
               <a
                 href={active.bookingUrl || bookHref}
                 {...(active.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : bookLinkProps)}
-                className="inline-flex min-h-[50px] items-center justify-center rounded-[4px] bg-brand text-[0.85rem] font-bold uppercase tracking-[0.08em] text-white hover:bg-brand-deep"
+                className="mt-4 flex min-h-[42px] items-center justify-center rounded-[4px] bg-brand text-[0.78rem] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-deep"
               >
                 {bookingReady || active.bookingUrl ? 'Book on Booksy' : 'Booksy — call to book'}
               </a>
             </div>
-
-            {active.demo && (
-              <EditorNote>
-                Stand-in chair. The name is a placeholder and both buttons point at the shop line and booking action —
-                swap in the real barber once names, numbers and personal Booksy links are supplied.
-              </EditorNote>
-            )}
-          </Reveal>
-        )}
+          )}
+        </div>
       </div>
 
-      {rosterIsDemo && !active && (
-        <EditorNote>
-          These ten chairs are stand-ins so the click-to-open interaction can be demonstrated. Fill the{' '}
-          <code>barbers</code> array in <code>src/data/business.ts</code> and the real roster replaces them
-          automatically.
-        </EditorNote>
-      )}
+      <p className="mt-3 text-center text-[0.82rem] text-muted">
+        Tap a number to see that barber.
+        <span className="sm:hidden"> Swipe the photo to reach them all.</span>
+        {rosterIsDemo && ' Names are placeholders until the real roster is added.'}
+      </p>
     </div>
   );
 }
