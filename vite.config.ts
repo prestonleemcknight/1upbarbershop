@@ -35,6 +35,7 @@ function structuredData(): Plugin {
 }
 
 export default defineConfig({
+  base: '/1upbarbershop/',
   plugins: [react(), tailwindcss(), structuredData()],
   build: {
     target: 'es2020',
