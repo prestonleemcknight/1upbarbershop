@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ElementType, type ReactNode, type Ref } from 'react';
 import { bookHref, bookLinkProps } from '../data/business';
 import { ArrowIcon } from './Icons';
+import { Logo } from './Logo';
 
 /* ── Buttons ────────────────────────────────────────────────────────────── */
 
@@ -32,6 +33,8 @@ type SectionProps = {
   className?: string;
   tone?: 'dark' | 'light' | 'panel';
   as?: ElementType;
+  /** Faint 1UP mark behind the content. Used on the inner pages. */
+  watermark?: boolean;
 };
 
 const tones = {
@@ -40,10 +43,26 @@ const tones = {
   light: 'bg-bone text-ink',
 };
 
-export function Section({ id, children, className = '', tone = 'dark', as: Tag = 'section' }: SectionProps) {
+export function Section({
+  id,
+  children,
+  className = '',
+  tone = 'dark',
+  as: Tag = 'section',
+  watermark = false,
+}: SectionProps) {
   return (
-    <Tag id={id} className={`${tones[tone]} ${className}`} aria-labelledby={`${id}-heading`}>
-      <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 md:py-28 xl:py-32">{children}</div>
+    <Tag
+      id={id}
+      className={`${tones[tone]} ${watermark ? 'relative isolate overflow-hidden' : ''} ${className}`}
+      aria-labelledby={`${id}-heading`}
+    >
+      {watermark && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
+          <Logo className="w-[min(115vw,64rem)] max-w-none opacity-[0.045]" />
+        </div>
+      )}
+      <div className="relative mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 md:py-28 xl:py-32">{children}</div>
     </Tag>
   );
 }

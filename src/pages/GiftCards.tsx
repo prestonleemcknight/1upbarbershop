@@ -3,7 +3,7 @@ import { business } from '../data/business';
 
 export default function GiftCardsPage() {
   return (
-    <Section id="gift-cards">
+    <Section id="gift-cards" watermark>
       <div className="mx-auto max-w-2xl">
         <SectionHeading
           id="gift-cards"

@@ -1,4 +1,5 @@
-import { Section, SectionHeading, BookButton, buttonPrimary, buttonGhostDark } from '../components/ui';
+import { Section, SectionHeading, buttonPrimary, buttonGhostDark } from '../components/ui';
+import { ApplicationForm } from '../components/ApplicationForm';
 import { business } from '../data/business';
 
 const offers = [
@@ -18,7 +19,7 @@ const requirements = [
 
 export default function EmploymentPage() {
   return (
-    <Section id="employment">
+    <Section id="employment" watermark>
       <div className="mx-auto max-w-3xl">
         <SectionHeading
           id="employment"
@@ -63,18 +64,22 @@ export default function EmploymentPage() {
           </ul>
         </div>
 
+        <div className="mt-10 border-t border-hairline pt-10">
+          <ApplicationForm />
+        </div>
+
         <div className="mt-10 border-t border-hairline pt-10 text-center">
-          <h3 className="display-xl text-[clamp(1.4rem,3.6vw,2rem)]">Ready to apply?</h3>
+          <h3 className="display-xl text-[clamp(1.4rem,3.6vw,2rem)]">Rather talk first?</h3>
           <p className="mt-3 text-[1rem] leading-relaxed text-muted">
             Call the shop, or stop in with your portfolio at {business.addressLine}.
           </p>
           <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <a href={business.phoneHref} className={`${buttonPrimary} w-full !min-h-[54px] sm:w-auto`}>
+            <a href={business.phoneHref} className={`${buttonGhostDark} w-full !min-h-[54px] sm:w-auto`}>
               Call {business.phoneDisplay}
             </a>
-            <BookButton className={`${buttonGhostDark} w-full !min-h-[54px] sm:w-auto`} withArrow={false}>
-              Visit the shop
-            </BookButton>
+            <a href={`mailto:${business.email}`} className={`${buttonPrimary} w-full !min-h-[54px] sm:w-auto`}>
+              {business.email}
+            </a>
           </div>
         </div>
       </div>

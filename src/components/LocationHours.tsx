@@ -55,7 +55,7 @@ function PolicyBlock({ title, body, confirm }: { title: string; body: string; co
 
 export function LocationHours() {
   return (
-    <Section id="location" tone="panel">
+    <Section id="location" tone="panel" watermark>
       <SectionHeading
         id="location"
         eyebrow="Location & Hours"
@@ -105,7 +105,7 @@ export function LocationHours() {
             {policies.walkIns && (
               <PolicyBlock title="Walk-in policy" body={policies.walkInNote} confirm={false} />
             )}
-            <PolicyBlock title="Refunds & no-shows" confirm body={policies.refunds} />
+            <PolicyBlock title="Refunds & no-shows" confirm={false} body={policies.refunds} />
           </div>
         </div>
       </div>

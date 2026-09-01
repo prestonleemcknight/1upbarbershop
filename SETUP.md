@@ -97,12 +97,23 @@ but one with some depth toward the edges (chairs, stations, lighting) looks
 best. A `.webp` works too; if you use one, change `HERO_PHOTO` at the top of
 `src/components/Hero.tsx` to match the extension.
 
-### The chair-picker backdrop (optional)
+### The chair-picker photo
 
-The "Choose a Barber" / "Meet Our Barbers" chair grid sits on an optional shop
-photo at `public/images/1up-barbershop-chairs.png`. Without it the grid sits on
-flat ink and still works — the chairs are drawn, not hotspots on a photo, so
-nothing has to line up pixel-for-pixel.
+The "Choose a Barber" / "Meet Our Barbers" picker shows the shop photo with a
+numbered marker on each barber. Save it to:
+
+```
+public/images/1up-barbershop-chairs.jpg
+```
+
+Without the file the photo is skipped and the chair list below it still works,
+so the page is never broken.
+
+**The markers will need nudging.** Their positions live in `chairHotspots` in
+`src/data/business.ts` as x/y percentages of the image box, currently set to a
+plausible arc. Load the page, see where each numbered marker lands, and adjust
+the numbers until each one sits on the right person. Marker 1 is chair 1, and
+so on down the list.
 
 ### Everything else
 

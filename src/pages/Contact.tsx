@@ -3,7 +3,7 @@ import { ChairPicker } from '../components/ChairPicker';
 
 export default function ContactPage() {
   return (
-    <Section id="contact">
+    <Section id="contact" watermark>
       <SectionHeading
         id="contact"
         eyebrow="The Team"

@@ -11,7 +11,7 @@ const points = [
 
 export default function AboutPage() {
   return (
-    <Section id="about">
+    <Section id="about" watermark>
       <div className="mx-auto max-w-3xl">
         <SectionHeading
           id="about"

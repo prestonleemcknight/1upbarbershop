@@ -40,7 +40,7 @@ export default function SocialsPage() {
   const hasTikTok = business.tiktok.length > 0;
 
   return (
-    <Section id="socials">
+    <Section id="socials" watermark>
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           id="socials"

@@ -3,7 +3,7 @@ import { BookButton, Code, EditorNote, NeedsInfo, Reveal, Section, SectionHeadin
 
 export function Services() {
   return (
-    <Section id="services" tone="dark">
+    <Section id="services" tone="dark" watermark>
       <SectionHeading
         id="services"
         eyebrow="Services & Pricing"

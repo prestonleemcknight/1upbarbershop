@@ -4,7 +4,7 @@ import { business, bookingReady, policies } from '../data/business';
 
 export default function BookPage() {
   return (
-    <Section id="book">
+    <Section id="book" watermark>
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           id="book"

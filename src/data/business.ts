@@ -33,8 +33,7 @@ export const business = {
 
   phoneDisplay: '(210) 708-2580',
   phoneHref: 'tel:+12107082580',
-  /** TODO: no shop email address exists yet. Leave empty to hide it site-wide. */
-  email: '',
+  email: 'up1barbershop@gmail.com',
 
   instagram: 'https://www.instagram.com/up1barbershop/',
   instagramHandle: '@up1barbershop',
@@ -291,6 +290,24 @@ export const demoChairs: Barber[] = Array.from({ length: chairCount }, (_, i) =>
   instagram: '',
   demo: true,
 }));
+
+/**
+ * Where each barber stands in the shop photo, as a percentage of the image
+ * box. These are placed by eye against the shop photo — nudge x/y here until
+ * each marker sits on the right person. Order matches `chairRoster`.
+ */
+export const chairHotspots: { x: number; y: number }[] = [
+  { x: 12, y: 62 },
+  { x: 24, y: 55 },
+  { x: 35, y: 50 },
+  { x: 45, y: 47 },
+  { x: 54, y: 45 },
+  { x: 63, y: 47 },
+  { x: 72, y: 50 },
+  { x: 81, y: 55 },
+  { x: 89, y: 61 },
+  { x: 96, y: 68 },
+];
 
 /** Real roster when it exists, stand-ins until then. */
 export const chairRoster: Barber[] = barbers.length > 0 ? barbers : demoChairs;
