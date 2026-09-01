@@ -1,0 +1,22 @@
+# 1UP Barbershop
+
+> Barbershop in Shaenfield, San Antonio, TX. Precision fades, tapers, beard
+> grooming, lineups, kids cuts and loc maintenance. Walk-ins welcome,
+> appointments available, open seven days a week.
+
+- Address: 7807 W Loop 1604 N, San Antonio, TX 78254
+- Phone: (210) 708-2580
+- Hours: Mon-Fri 10:00-19:00, Sat 10:00-17:00, Sun 11:00-17:00 (America/Chicago)
+- Walk-ins: welcome every day the shop is open
+- Instagram: https://www.instagram.com/up1barbershop/
+
+## Pages
+
+- [Home](/): services, barbers, gallery, reviews, location, hours and FAQ
+- [Privacy Policy](/privacy.html): what this site does with your information
+- [Accessibility Statement](/accessibility.html): accessibility commitments and contact
+
+## Notes
+
+Service prices, durations and barber profiles are not published yet — call the
+shop for current pricing.

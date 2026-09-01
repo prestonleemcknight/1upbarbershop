@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" role="img" aria-label="Barber portrait — at the station">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12171F"/><stop offset="1" stop-color="#0B0F14"/></linearGradient>
+<pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="10" stroke="#ffffff" stroke-opacity="0.028" stroke-width="3"/></pattern>
+</defs>
+<rect width="900" height="900" fill="url(#g)"/>
+<rect width="900" height="900" fill="url(#p)"/>
+<rect x="0" y="889" width="306" height="11" fill="#1B5CE0"/>
+<g fill="#8C9AAB" font-family="Archivo, Segoe UI, Helvetica, Arial, sans-serif" font-size="47" font-weight="600" text-anchor="middle">
+<text x="450" y="426.5">PHOTO PLACEHOLDER</text>
+<text x="450" y="492.3" font-size="29" font-weight="500" fill="#6E7B8B">Barber portrait — at the station</text>
+</g>
+</svg>
