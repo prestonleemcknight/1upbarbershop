@@ -87,7 +87,7 @@ export const timeZone = 'America/Chicago';
 export const policies = {
   /** Confirmed: walk-ins are always welcome, appointments available, open 7 days. */
   walkIns: true,
-  walkInNote: 'Walk-ins are always welcome. Booking ahead just guarantees your chair.',
+  walkInNote: 'Walk-ins are always welcome. Booking ahead just means a chair is waiting on you.',
   /** TODO: confirm parking details (free lot? shared center lot? street?). */
   parking: '',
   /** TODO: confirm accepted payment methods (cash, card, Apple Pay, Cash App...). */

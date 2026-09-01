@@ -57,7 +57,7 @@ export function Header() {
         scrolled || open ? 'border-hairline bg-ink/95 backdrop-blur-md' : 'border-transparent bg-ink/70 backdrop-blur-sm'
       }`}
     >
-      <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
         {/* Accessible name is built from the visible text, so voice control matches what people see. */}
         <a href="#top" className="group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone">
           <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-brand text-[0.95rem] font-extrabold tracking-tight text-white">
@@ -93,9 +93,14 @@ export function Header() {
             <span className="sr-only xl:hidden">Call {business.name} at {business.phoneDisplay}</span>
           </a>
 
-          <BookButton className={`${buttonPrimary} hidden !px-5 !text-[0.8rem] sm:inline-flex`} withArrow={false}>
-            {bookLabel}
-          </BookButton>
+          {/* Wrapped rather than class-toggled: the shared button style sets its own
+              display, which would win over a bare `hidden` utility. Below sm the
+              sticky bottom bar already carries this action. */}
+          <span className="hidden sm:block">
+            <BookButton className={`${buttonPrimary} !px-5 !text-[0.8rem]`} withArrow={false}>
+              {bookLabel}
+            </BookButton>
+          </span>
 
           <button
             ref={toggleRef}
@@ -123,7 +128,7 @@ export function Header() {
         hidden={!open}
         className="border-t border-hairline bg-ink lg:hidden"
       >
-        <nav aria-label="Mobile" className="mx-auto max-w-6xl px-5 py-3 sm:px-8">
+        <nav aria-label="Mobile" className="mx-auto max-w-7xl px-5 py-3 sm:px-8">
           <ul className="flex flex-col">
             {navLinks.map((link) => (
               <li key={link.href} className="border-b border-hairline/60 last:border-0">

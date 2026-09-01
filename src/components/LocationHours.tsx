@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
 import { business, hours, policies } from '../data/business';
-import { formatRange, getOpenStatus } from '../lib/hours';
+import { formatRange } from '../lib/hours';
+import { useShopStatus } from '../lib/useShopClock';
 import { BookButton, NeedsInfo, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
 import { PhoneIcon, PinIcon } from './Icons';
 
 function HoursTable() {
-  const [todayIndex, setTodayIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    setTodayIndex(getOpenStatus().today?.dayIndex ?? null);
-  }, []);
+  const todayIndex = useShopStatus()?.today?.dayIndex ?? null;
 
   return (
     <table className="w-full border-collapse text-left">
@@ -43,6 +39,104 @@ function HoursTable() {
   );
 }
 
+/** Stylised map card. A linked still image keeps the page free of third-party scripts and cookies. */
+function MapCard() {
+  return (
+    <a
+      href={business.googleMapsUrl}
+      target="_blank"
+      rel="noopener"
+      className="group block overflow-hidden rounded-[4px] border border-hairline bg-ink transition-colors hover:border-brand-lift"
+    >
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink-3">
+        <svg
+          viewBox="0 0 640 400"
+          className="absolute inset-0 h-full w-full"
+          aria-hidden
+          focusable="false"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <rect width="640" height="400" fill="#131a22" />
+          {/* City blocks */}
+          <g fill="#171f29">
+            <rect x="24" y="24" width="150" height="86" rx="3" />
+            <rect x="220" y="24" width="120" height="86" rx="3" />
+            <rect x="390" y="24" width="110" height="60" rx="3" />
+            <rect x="24" y="270" width="130" height="106" rx="3" />
+            <rect x="205" y="292" width="150" height="84" rx="3" />
+            <rect x="420" y="250" width="170" height="126" rx="3" />
+          </g>
+          {/* Surface streets */}
+          <g stroke="#212b37" strokeWidth="9" strokeLinecap="square">
+            <path d="M0 140h640M0 250h640M190 0v400M380 0v400M540 0v400" />
+          </g>
+          {/* The loop */}
+          <path
+            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
+            stroke="#14356f"
+            strokeWidth="28"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <path
+            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
+            stroke="#1b5ce0"
+            strokeWidth="20"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <path
+            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
+            stroke="#8fbcff"
+            strokeWidth="2"
+            strokeDasharray="16 18"
+            fill="none"
+            opacity="0.7"
+          />
+          <text
+            x="470"
+            y="104"
+            fill="#9dc2ff"
+            fontFamily="Archivo, Helvetica, Arial, sans-serif"
+            fontSize="17"
+            fontWeight="700"
+            letterSpacing="1.5"
+            transform="rotate(-21 470 104)"
+          >
+            W LOOP 1604 N
+          </text>
+          {/* Shop marker */}
+          <circle cx="300" cy="238" r="34" fill="#1b5ce0" opacity="0.1" />
+          <path
+            d="M300 268c0 0-17-13.5-17-26.5a17 17 0 1 1 34 0c0 13-17 26.5-17 26.5Z"
+            fill="#e8ecf1"
+            stroke="#0b0f14"
+            strokeWidth="2"
+          />
+          <circle cx="300" cy="241" r="6.5" fill="#1b5ce0" />
+        </svg>
+
+        <span className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 bg-ink/88 px-4 py-3 text-[0.85rem] font-semibold backdrop-blur-sm">
+          <span className="text-bone">{business.addressLine}</span>
+          <span className="shrink-0 text-brand-lift group-hover:underline">Open in Maps</span>
+        </span>
+      </div>
+    </a>
+  );
+}
+
+function PolicyBlock({ title, body, confirm }: { title: string; body: string; confirm: boolean }) {
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="text-[0.95rem] font-bold">{title}</h3>
+        {confirm && <NeedsInfo>Confirm</NeedsInfo>}
+      </div>
+      <p className="mt-1.5 text-[0.92rem] leading-relaxed text-muted">{body}</p>
+    </div>
+  );
+}
+
 export function LocationHours() {
   return (
     <Section id="location" tone="panel">
@@ -54,6 +148,7 @@ export function LocationHours() {
       />
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
+        {/* Left: how to reach us, then the full week. */}
         <div>
           <h3 className="eyebrow text-muted">Address</h3>
           <address className="mt-3 not-italic">
@@ -80,76 +175,33 @@ export function LocationHours() {
             </BookButton>
           </div>
 
-          <div className="mt-8 space-y-5 border-t border-hairline pt-8">
-            {policies.walkIns && (
-              <div>
-                <h3 className="text-[0.95rem] font-bold">Walk-in policy</h3>
-                <p className="mt-1.5 text-[0.92rem] leading-relaxed text-muted">{policies.walkInNote}</p>
-              </div>
-            )}
-
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[0.95rem] font-bold">Parking</h3>
-                {!policies.parking && <NeedsInfo>Confirm</NeedsInfo>}
-              </div>
-              <p className="mt-1.5 text-[0.92rem] leading-relaxed text-muted">
-                {policies.parking || 'Add the shop’s parking details here (lot, entrance, and where to walk in from).'}
-              </p>
-            </div>
-
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[0.95rem] font-bold">Landmark</h3>
-                {!policies.landmark && <NeedsInfo>Confirm</NeedsInfo>}
-              </div>
-              <p className="mt-1.5 text-[0.92rem] leading-relaxed text-muted">
-                {policies.landmark ||
-                  'Add the nearest cross street or the neighboring business so first-timers spot the door.'}
-              </p>
-            </div>
+          <h3 className="eyebrow mt-10 border-t border-hairline pt-8 text-muted">Weekly hours</h3>
+          <div className="mt-3">
+            <HoursTable />
           </div>
         </div>
 
+        {/* Right: where it is, then what to expect when you arrive. */}
         <div>
-          {/* Linked map card instead of an embedded iframe: no third-party script, no CLS, no cookies. */}
-          <a
-            href={business.googleMapsUrl}
-            target="_blank"
-            rel="noopener"
-            className="group block overflow-hidden rounded-[4px] border border-hairline bg-ink transition-colors hover:border-brand-lift"
-          >
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink-3">
-              <svg
-                viewBox="0 0 640 400"
-                className="absolute inset-0 h-full w-full"
-                aria-hidden
-                focusable="false"
-                preserveAspectRatio="xMidYMid slice"
-              >
-                <rect width="640" height="400" fill="#141b24" />
-                <g stroke="#1e2733" strokeWidth="10" strokeLinecap="round">
-                  <path d="M0 118h640M0 288h640M158 0v400M462 0v400" />
-                </g>
-                <g stroke="#26313f" strokeWidth="4">
-                  <path d="M0 60h640M0 200h640M0 350h640M80 0v400M300 0v400M560 0v400" />
-                </g>
-                <path d="M-30 372 C 130 350, 250 300, 340 210 S 520 70, 680 42" stroke="#1b5ce0" strokeWidth="22" fill="none" opacity="0.5" strokeLinecap="round" />
-                <path d="M-30 372 C 130 350, 250 300, 340 210 S 520 70, 680 42" stroke="#6fa8ff" strokeWidth="2" strokeDasharray="14 14" fill="none" opacity="0.6" />
-                <circle cx="320" cy="212" r="32" fill="#1b5ce0" opacity="0.2" />
-                <circle cx="320" cy="212" r="14" fill="#0b0f14" />
-                <circle cx="320" cy="212" r="7" fill="#6fa8ff" />
-              </svg>
-              <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-ink/85 px-4 py-3 text-[0.85rem] font-semibold backdrop-blur-sm">
-                <span className="text-bone">{business.addressLine}</span>
-                <span className="shrink-0 text-brand-lift group-hover:underline">Open in Maps</span>
-              </span>
-            </div>
-          </a>
+          <MapCard />
 
-          <h3 className="eyebrow mt-8 text-muted">Weekly hours</h3>
-          <div className="mt-3">
-            <HoursTable />
+          <div className="mt-8 space-y-6 border-t border-hairline pt-8">
+            {policies.walkIns && (
+              <PolicyBlock title="Walk-in policy" body={policies.walkInNote} confirm={false} />
+            )}
+            <PolicyBlock
+              title="Parking"
+              confirm={!policies.parking}
+              body={policies.parking || 'Add the shop’s parking details here (lot, entrance, and where to walk in from).'}
+            />
+            <PolicyBlock
+              title="Landmark"
+              confirm={!policies.landmark}
+              body={
+                policies.landmark ||
+                'Add the nearest cross street or the neighboring business so first-timers spot the door.'
+              }
+            />
           </div>
         </div>
       </div>

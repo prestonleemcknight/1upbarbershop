@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { business, gallery, galleryCategories, type GalleryItem } from '../data/business';
-import { NeedsInfo, Section, SectionHeading, buttonGhostDark } from './ui';
+import { Code, EditorNote, Section, SectionHeading, buttonGhostDark } from './ui';
 import { CloseIcon, InstagramIcon } from './Icons';
 
 type Filter = 'All' | (typeof galleryCategories)[number];
@@ -141,12 +141,10 @@ export function Gallery() {
       </div>
 
       {anyPlaceholder && (
-        <p className="mt-8 flex flex-wrap items-center gap-3 rounded-[4px] border border-dashed border-amber-400/50 bg-amber-400/5 px-4 py-3 text-[0.9rem] text-amber-200">
-          <NeedsInfo>Editor note</NeedsInfo>
-          These are labelled placeholders. Swap in real photos of your own cuts (keep the descriptive filenames) and
-          update each alt description in{' '}
-          <code className="rounded bg-ink-3 px-1.5 py-0.5 text-[0.82rem] text-bone">src/data/business.ts</code>.
-        </p>
+        <EditorNote>
+          These are labeled placeholders. Swap in real photos of your own cuts (keep the descriptive filenames) and
+          update each alt description in <Code>src/data/business.ts</Code>.
+        </EditorNote>
       )}
 
       <div className="mt-8" role="group" aria-label="Filter gallery by type of work">
@@ -191,8 +189,11 @@ export function Gallery() {
                 className="aspect-4/5 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <span className="flex items-center justify-between gap-2 px-3 py-2.5 text-left text-[0.72rem] font-bold uppercase tracking-[0.1em] text-muted">
-                {item.category}
-                <span className="text-brand-lift opacity-0 transition-opacity group-hover:opacity-100" aria-hidden>
+                <span className="truncate">{item.category}</span>
+                <span
+                  className="hidden shrink-0 text-brand-lift opacity-0 transition-opacity group-hover:opacity-100 sm:inline"
+                  aria-hidden
+                >
                   View
                 </span>
               </span>

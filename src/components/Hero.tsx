@@ -1,23 +1,12 @@
-import { useEffect, useState } from 'react';
 import { business, bookLabelLong, hours, policies, ratingInfo } from '../data/business';
-import { formatRange, getOpenStatus } from '../lib/hours';
+import { formatRange } from '../lib/hours';
+import { useShopStatus } from '../lib/useShopClock';
 import { BookButton, buttonGhostDark, buttonPrimary } from './ui';
 import { ClockIcon, PinIcon, StarIcon, WalkInIcon } from './Icons';
 
-/** Rendered after mount so the "open now" state is never stale in a cached HTML shell. */
+/** Reads the live open/closed state after hydration; the prerendered HTML shows general hours. */
 function TodayStatus() {
-  const [status, setStatus] = useState<{ label: string; isOpen: boolean } | null>(null);
-
-  useEffect(() => {
-    const update = () => {
-      const s = getOpenStatus();
-      setStatus({ label: s.label, isOpen: s.isOpen });
-    };
-    update();
-    const t = window.setInterval(update, 60_000);
-    return () => window.clearInterval(t);
-  }, []);
-
+  const status = useShopStatus();
   const weekdays = hours.find((h) => h.dayIndex === 1);
   const fallback = weekdays ? `Mon–Fri ${formatRange(weekdays)}` : 'Open 7 days';
 
@@ -51,16 +40,16 @@ export function Hero() {
       />
       <div aria-hidden className="texture-grit absolute inset-0 -z-10" />
 
-      <div className="mx-auto w-full max-w-6xl px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-24 md:pb-28 md:pt-32">
+      <div className="mx-auto w-full max-w-7xl px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-24 md:pb-28 md:pt-32 xl:pb-32 xl:pt-40">
         <p className="eyebrow flex flex-wrap items-center gap-x-3 gap-y-2 text-brand-lift">
           <span>Barbershop in {business.neighborhood}</span>
           <span aria-hidden className="hidden h-3 w-px bg-hairline sm:block" />
           <span>San Antonio, TX</span>
         </p>
 
-        <h1 className="display-xl mt-5 max-w-[15ch] text-[clamp(2.6rem,10.5vw,5.6rem)]">
+        <h1 className="display-xl mt-5 max-w-[19ch] text-[clamp(2.35rem,8.4vw,5.6rem)]">
           Precision fades on{' '}
-          <span className="text-brand-lift">W&nbsp;Loop&nbsp;1604</span>, seven days a week.
+          <span className="text-brand-lift">W&nbsp;Loop 1604</span>, seven days a week.
         </h1>
 
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone-2 sm:text-xl">

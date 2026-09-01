@@ -12,7 +12,7 @@ const icons = {
 export function TrustBar() {
   return (
     <section aria-label="What to expect" className="border-y border-hairline bg-ink-2">
-      <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-px overflow-hidden bg-hairline sm:grid-cols-3 lg:grid-cols-5">
+      <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden bg-hairline sm:grid-cols-3 lg:grid-cols-5">
         {trustFacts.map((fact) => {
           const Icon = icons[fact.icon];
           return (

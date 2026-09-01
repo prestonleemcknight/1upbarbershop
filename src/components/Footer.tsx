@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { business, hours } from '../data/business';
 import { formatRange } from '../lib/hours';
+import { useCurrentYear } from '../lib/useShopClock';
 import { InstagramIcon, PhoneIcon } from './Icons';
 
 const footerNav = [
@@ -13,13 +13,12 @@ const footerNav = [
 ];
 
 export function Footer() {
-  // Filled in after mount so the prerendered HTML can never carry a stale year.
-  const [year, setYear] = useState<number | null>(null);
-  useEffect(() => setYear(new Date().getFullYear()), []);
+  // Resolved after hydration so the prerendered HTML can never carry a stale year.
+  const year = useCurrentYear();
 
   return (
     <footer className="border-t border-hairline bg-ink-2 pb-28 lg:pb-0">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-3">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-3">
         <div>
           <p className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-brand text-[0.95rem] font-extrabold text-white">
@@ -89,7 +88,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-hairline">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 text-[0.82rem] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-6 text-[0.82rem] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
             © {year ?? ''} {business.legalName}. {business.addressLine}. {business.phoneDisplay}.
           </p>

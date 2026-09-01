@@ -1,17 +1,14 @@
 import { barbers, barberPlaceholderImages, bookLabel, bookingReady } from '../data/business';
-import { BookButton, NeedsInfo, Reveal, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
+import { BookButton, Code, EditorNote, NeedsInfo, Reveal, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
 
 /** Shown until real barber names, specialties, bios and photos are supplied. */
 function BarberPlaceholders() {
   return (
     <>
-      <p className="mt-8 flex flex-wrap items-center gap-3 rounded-[4px] border border-dashed border-amber-400/50 bg-amber-400/5 px-4 py-3 text-[0.9rem] text-amber-200">
-        <NeedsInfo>Editor note</NeedsInfo>
-        Barber names, specialties, bios and photos have not been supplied. Fill the{' '}
-        <code className="rounded bg-ink-3 px-1.5 py-0.5 text-[0.82rem] text-bone">barbers</code> array in{' '}
-        <code className="rounded bg-ink-3 px-1.5 py-0.5 text-[0.82rem] text-bone">src/data/business.ts</code> and real
-        profiles replace these cards.
-      </p>
+      <EditorNote>
+        Barber names, specialties, bios and photos have not been supplied. Fill the <Code>barbers</Code> array in{' '}
+        <Code>src/data/business.ts</Code> and real profiles replace these cards.
+      </EditorNote>
 
       <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {barberPlaceholderImages.map((src, i) => (
@@ -26,7 +23,7 @@ function BarberPlaceholders() {
                 className="aspect-square w-full object-cover"
               />
               <div className="p-5">
-                <NeedsInfo>Barber {i + 1}</NeedsInfo>
+                <NeedsInfo className="self-start">Barber {i + 1}</NeedsInfo>
                 <p className="mt-3 text-[0.9rem] leading-relaxed text-muted">
                   Add this barber’s name, specialty (fades, beard work, locs, kids), a two-line bio, the days they work
                   and their personal booking link.

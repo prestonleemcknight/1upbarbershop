@@ -28,7 +28,7 @@ update together.
 | 7 | **Parking details** (own lot? shared center lot? where to walk in from) | `policies.parking` |
 | 8 | **Accepted payment methods** (cash, card, Apple Pay, Cash App…) | `policies.payments` |
 | 9 | **Late / grace-period policy** | `policies.latePolicy` |
-| 10 | **Nearest cross street or neighbouring business** | `policies.landmark` |
+| 10 | **Nearest cross street or neighboring business** | `policies.landmark` |
 
 Items 7–9 also appear in the FAQ as questions marked **"Needs confirming"**.
 A question with an unconfirmed answer is deliberately **left out of the FAQ
@@ -49,7 +49,30 @@ in `src/data/content.ts` (`faqs`) and delete its `needsInfo: true` flag.
 | 17 | **Web host name** | `[CONFIRM YOUR HOST]` in `privacy.html` |
 | 18 | **Physical accessibility of the shop** | `[CONFIRM AND DESCRIBE PHYSICAL ACCESSIBILITY]` in `accessibility.html` |
 
-## 4. Photography
+## 4. Images you need to supply
+
+Thirteen images. Every one is currently a generated placeholder with
+**PHOTO PLACEHOLDER** printed on it and a note about which shot belongs there.
+
+| Slot | Where it appears | Suggested export | Filename to overwrite |
+|---|---|---|---|
+| Hero — wide shot of the shop floor / chairs | top of the page, full-bleed | 1600 × 900 (16:9) | `1up-barbershop-shop-floor-shaenfield-san-antonio` |
+| Interior — station, mirrors, tools | "Why 1UP" | 1200 × 900 (4:3) | `1up-barbershop-interior-barber-chairs` |
+| Skin fade, back of head | Gallery → Fades | 1000 × 1250 (4:5) | `1up-barbershop-skin-fade-san-antonio` |
+| Mid taper fade, side profile | Gallery → Fades | 1000 × 1250 | `1up-barbershop-mid-taper-fade` |
+| Hard part / hair design detail | Gallery → Fades | 1000 × 1250 | `1up-barbershop-hair-design-hard-part` |
+| Classic scissor cut, styled | Gallery → Classic Cuts | 1000 × 1250 | `1up-barbershop-classic-scissor-cut` |
+| Kids cut in the chair | Gallery → Classic Cuts | 1000 × 1250 | `1up-barbershop-kids-first-haircut` |
+| Loc retwist / maintenance | Gallery → Classic Cuts | 1000 × 1250 | `1up-barbershop-loc-retwist-maintenance` |
+| Beard shape-up and lineup | Gallery → Beard Work | 1000 × 1250 | `1up-barbershop-beard-shape-up-lineup` |
+| Before + after transformation | Gallery → Transformations | 1000 × 1250 | `1up-barbershop-before-after-transformation` |
+| Barber portrait × 3 | Meet the Barbers | 900 × 900 (1:1) | `1up-barbershop-barber-portrait-1/2/3` |
+
+Shoot notes: portrait/4:5 for gallery work so it fills the tile without cropping
+heads off; square for barber portraits; landscape for the hero. Get permission
+from clients before posting their cut.
+
+## 5. Photography — how to swap a placeholder
 
 Every image in `public/images/` is a generated placeholder that says
 **PHOTO PLACEHOLDER** on it, with a note about which shot belongs there.
@@ -69,6 +92,36 @@ To replace one:
 
 `node scripts/gen-placeholders.mjs` regenerates the placeholders if you need
 them back.
+
+---
+
+## Pre-publish checklist
+
+Work top to bottom. The site is publishable from the moment section 1 is done —
+everything after that makes it better.
+
+- [ ] Paste the booking URL into `booking.url` (unblocks 18 CTAs at once)
+- [ ] Fill in all 10 service prices
+- [ ] Fill in all 10 service durations
+- [ ] Add every barber: name, specialty, bio, working days, booking link
+- [ ] Shoot and drop in 13 photos (see section 4)
+- [ ] Paste 3 real Google reviews with reviewer first names
+- [ ] Verify the Google rating + review count, then set `ratingInfo.verified`
+- [ ] Confirm parking
+- [ ] Confirm accepted payment methods
+- [ ] Confirm the late / grace-period policy
+- [ ] Confirm the nearest cross street or landmark
+- [ ] Clear the three `needsInfo: true` flags in `src/data/content.ts` once the
+      policies above are written
+- [ ] Add the shop email address (or leave blank to keep it hidden)
+- [ ] Add the Google "write a review" link
+- [ ] Add Facebook / TikTok URLs if the shop has them
+- [ ] Point `business.siteUrl`, the canonical + OG tags in `index.html`,
+      `robots.txt` and `sitemap.xml` at the live domain
+- [ ] Date and finish `privacy.html` (host name) and `accessibility.html`
+      (physical accessibility of the shop)
+- [ ] Decide on a first-visit offer, or leave `firstVisitOffer.active` false
+- [ ] Run `npm run lint && npm run typecheck && npm run build` one last time
 
 ---
 

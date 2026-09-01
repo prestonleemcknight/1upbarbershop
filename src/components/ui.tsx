@@ -43,7 +43,7 @@ const tones = {
 export function Section({ id, children, className = '', tone = 'dark', as: Tag = 'section' }: SectionProps) {
   return (
     <Tag id={id} className={`${tones[tone]} ${className}`} aria-labelledby={`${id}-heading`}>
-      <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 md:py-28">{children}</div>
+      <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 md:py-28 xl:py-32">{children}</div>
     </Tag>
   );
 }
@@ -82,6 +82,34 @@ export function NeedsInfo({ children, className = '' }: { children: ReactNode; c
   );
 }
 
+/** Full-width banner explaining which real business detail a section is waiting on. */
+export function EditorNote({ children, tone = 'dark' }: { children: ReactNode; tone?: 'dark' | 'light' }) {
+  const dark = tone === 'dark';
+  return (
+    <p
+      className={`mt-8 flex flex-col items-start gap-2 rounded-[4px] border border-dashed px-4 py-3 text-[0.88rem] leading-relaxed sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 ${
+        dark ? 'border-amber-400/45 bg-amber-400/5 text-amber-200/90' : 'border-amber-600/45 bg-amber-500/8 text-amber-900'
+      }`}
+    >
+      {dark ? <NeedsInfo>Editor note</NeedsInfo> : <NeedsInfoLight>Editor note</NeedsInfoLight>}
+      <span className="min-w-0 sm:flex-1">{children}</span>
+    </p>
+  );
+}
+
+/** Inline code reference inside an editor note. */
+export function Code({ children, tone = 'dark' }: { children: ReactNode; tone?: 'dark' | 'light' }) {
+  return (
+    <code
+      className={`rounded px-1.5 py-0.5 text-[0.82rem] [overflow-wrap:anywhere] ${
+        tone === 'dark' ? 'bg-ink-3 text-bone' : 'bg-ink/8 text-ink'
+      }`}
+    >
+      {children}
+    </code>
+  );
+}
+
 export function NeedsInfoLight({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <span
@@ -116,10 +144,6 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el || shown) return;
-    if (typeof IntersectionObserver === 'undefined') {
-      setShown(true);
-      return;
-    }
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {

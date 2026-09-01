@@ -1,5 +1,5 @@
 /**
- * Generates lightweight, clearly-labelled photo placeholders.
+ * Generates lightweight, clearly labeled photo placeholders.
  * Replace every generated .svg in /public/images with a real photograph
  * (same filename + .jpg/.webp, then update src/data/business.ts).
  */

@@ -1,5 +1,5 @@
 import { business, ratingInfo, reviews, reviewsReady } from '../data/business';
-import { NeedsInfoLight, Reveal, Section, SectionHeading, buttonGhostLight } from './ui';
+import { Code, EditorNote, NeedsInfoLight, Reveal, Section, SectionHeading, buttonGhostLight } from './ui';
 import { StarIcon } from './Icons';
 
 export function Reviews() {
@@ -35,12 +35,10 @@ export function Reviews() {
       </div>
 
       {!ratingInfo.verified && (
-        <p className="mt-8 flex flex-wrap items-center gap-3 rounded-[4px] border border-dashed border-amber-600/50 bg-amber-500/8 px-4 py-3 text-[0.9rem] text-amber-900">
-          <NeedsInfoLight>Editor note</NeedsInfoLight>
+        <EditorNote tone="light">
           The Google rating and review count are not verified, so nothing is displayed. Check the live Google Business
-          Profile, then set <code className="rounded bg-ink/8 px-1.5 py-0.5 text-[0.82rem]">ratingInfo</code> in{' '}
-          <code className="rounded bg-ink/8 px-1.5 py-0.5 text-[0.82rem]">src/data/business.ts</code>.
-        </p>
+          Profile, then set <Code tone="light">ratingInfo</Code> in <Code tone="light">src/data/business.ts</Code>.
+        </EditorNote>
       )}
 
       <ul className="mt-10 grid gap-5 md:grid-cols-3">
@@ -55,7 +53,7 @@ export function Reviews() {
                 </>
               ) : (
                 <>
-                  <NeedsInfoLight>Review {i + 1}</NeedsInfoLight>
+                  <NeedsInfoLight className="self-start">Review {i + 1}</NeedsInfoLight>
                   <p className="mt-4 flex-1 text-[0.92rem] leading-relaxed text-muted-ink">
                     Paste a real Google review here, word for word, with the reviewer’s first name. Nothing is
                     written on the shop’s behalf.
