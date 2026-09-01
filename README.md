@@ -6,6 +6,10 @@ San Antonio, TX.
 **Read [SETUP.md](./SETUP.md) first** — it lists every real business detail the
 site is still waiting on (booking URL, prices, barbers, reviews, parking).
 
+[COMPETITORS.md](./COMPETITORS.md) has the local competitive research — who the
+premium shops in San Antonio are, what they charge, and where 1UP already wins.
+Useful when setting the price list.
+
 ## Commands
 
 ```bash
