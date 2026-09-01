@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { business, bookLabel } from '../data/business';
 import { BookButton, buttonPrimary } from './ui';
 import { CloseIcon, PhoneIcon } from './Icons';
+import { Logo } from './Logo';
 
 const navLinks = [
   { href: '#services', label: 'Services' },
@@ -60,9 +61,8 @@ export function Header() {
       <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
         {/* Accessible name is built from the visible text, so voice control matches what people see. */}
         <a href="#top" className="group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone">
-          <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-brand text-[0.95rem] font-extrabold tracking-tight text-white">
-            1UP
-          </span>{' '}
+          <Logo className="h-10 w-10 shrink-0" />
+          <span className="sr-only">1UP</span>{' '}
           <span className="hidden text-[0.95rem] font-extrabold uppercase tracking-[0.14em] sm:block">
             Barbershop
           </span>

@@ -2,6 +2,7 @@ import { business, hours } from '../data/business';
 import { formatRange } from '../lib/hours';
 import { useCurrentYear } from '../lib/useShopClock';
 import { InstagramIcon, PhoneIcon } from './Icons';
+import { Logo } from './Logo';
 
 const footerNav = [
   { href: '#services', label: 'Services' },
@@ -21,9 +22,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-3">
         <div>
           <p className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-brand text-[0.95rem] font-extrabold text-white">
-              1UP
-            </span>
+            <Logo className="h-10 w-10 shrink-0" />
             <span className="text-[0.95rem] font-extrabold uppercase tracking-[0.14em] text-bone">Barbershop</span>
           </p>
           <address className="mt-5 not-italic text-[0.95rem] leading-relaxed text-muted">

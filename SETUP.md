@@ -17,7 +17,7 @@ update together.
 | 1 | **Online booking URL** (Booksy / Square / Squire / Vagaro) | `booking.url` in `src/data/business.ts` | Every "Book" button falls back to click-to-call `(210) 708-2580`, and the labels read "Call to Book". The moment you paste a URL, all of them switch to the booking link, the labels become "Book Appointment", the FAQ answer changes, and a `ReserveAction` is added to the structured data. |
 | 2 | **Service prices** | `price` on each service in `serviceGroups` | Each card shows an `✎ ADD PRICE` badge and an editor note above the grid. `priceRange` is kept out of the JSON-LD until at least one real price exists. |
 | 3 | **Service durations** | `duration` on each service | Cards read "DURATION TBC". |
-| 4 | **Barber names, specialties, bios, photos, working days** | the empty `barbers` array | The section shows three clearly-marked placeholder cards. Fill the array and real profiles replace them automatically. |
+| 4 | **Barber names, specialties, bios, photos, working days** | the empty `barbers` array | The section shows three clearly-marked placeholder cards. Fill the array and real profiles replace them automatically. Instagram names the owners as **@brandowontmiss** and **@ej.fades** — their real names are still needed. Each barber now also takes an `instagram` link, which renders on their card. |
 | 5 | **Real customer reviews** | `reviews` array | Three cards marked `✎ REVIEW 1/2/3`. Paste real Google reviews **word for word** with the reviewer's first name. Nothing is invented. |
 | 6 | **Google rating + review count** | `ratingInfo` | Not displayed at all. Check the live Google Business Profile, then set `verified: true` with the real numbers. Only then does `aggregateRating` appear in the structured data. |
 
@@ -40,14 +40,15 @@ in `src/data/content.ts` (`faqs`) and delete its `needsInfo: true` flag.
 
 | # | What's missing | Where to fix it |
 |---|---|---|
-| 11 | **Shop email address** (none exists yet) | `business.email` — leave empty and it stays hidden everywhere |
-| 12 | **Google "write a review" link** | `business.googleReviewsUrl` — while empty, the button says "Find us on Google" and uses the Maps link |
-| 13 | **Facebook / TikTok URLs** | `business.facebook`, `business.tiktok` — they only appear in `sameAs` when filled |
-| 14 | **First-visit offer** | `firstVisitOffer` — the entire section is off (`active: false`). Only switch it on for a real offer |
-| 15 | **Live domain** | `business.siteUrl`, plus the `canonical`, `og:url`, `og:image` and `twitter:image` tags in `index.html`, `public/robots.txt` and `public/sitemap.xml` |
-| 16 | **Dates on the legal pages** | `[ADD DATE BEFORE PUBLISHING]` in `privacy.html` and `accessibility.html` |
-| 17 | **Web host name** | `[CONFIRM YOUR HOST]` in `privacy.html` |
-| 18 | **Physical accessibility of the shop** | `[CONFIRM AND DESCRIBE PHYSICAL ACCESSIBILITY]` in `accessibility.html` |
+| 11 | **The real logo file** | `src/components/Logo.tsx` — the circular badge there is a hand-built stand-in in the shop's colours. The script lettering in the actual logo can't be reproduced from a screenshot. Export the real mark as SVG (or a transparent PNG at 2x), drop it in `public/images/`, and swap it into that component. The same shape is repeated in `public/favicon.svg`, `privacy.html` and `accessibility.html`. |
+| 12 | **Shop email address** (none exists yet) | `business.email` — leave empty and it stays hidden everywhere |
+| 13 | **Google "write a review" link** | `business.googleReviewsUrl` — while empty, the button says "Find us on Google" and uses the Maps link |
+| 14 | **Facebook / TikTok URLs** | `business.facebook`, `business.tiktok` — they only appear in `sameAs` when filled |
+| 15 | **First-visit offer** | `firstVisitOffer` — the entire section is off (`active: false`). Only switch it on for a real offer |
+| 16 | **Live domain** | `business.siteUrl`, plus the `canonical`, `og:url`, `og:image` and `twitter:image` tags in `index.html`, `public/robots.txt` and `public/sitemap.xml` |
+| 17 | **Dates on the legal pages** | `[ADD DATE BEFORE PUBLISHING]` in `privacy.html` and `accessibility.html` |
+| 18 | **Web host name** | `[CONFIRM YOUR HOST]` in `privacy.html` |
+| 19 | **Physical accessibility of the shop** | `[CONFIRM AND DESCRIBE PHYSICAL ACCESSIBILITY]` in `accessibility.html` |
 
 ## 4. Images you need to supply
 
@@ -103,7 +104,9 @@ everything after that makes it better.
 - [ ] Paste the booking URL into `booking.url` (unblocks 18 CTAs at once)
 - [ ] Fill in all 10 service prices
 - [ ] Fill in all 10 service durations
-- [ ] Add every barber: name, specialty, bio, working days, booking link
+- [ ] Add every barber: name, specialty, bio, working days, booking link, Instagram
+      (owners are @brandowontmiss and @ej.fades — real names needed)
+- [ ] Export the real logo and swap out the stand-in badge in `src/components/Logo.tsx`
 - [ ] Shoot and drop in 13 photos (see section 4)
 - [ ] Paste 3 real Google reviews with reviewer first names
 - [ ] Verify the Google rating + review count, then set `ratingInfo.verified`

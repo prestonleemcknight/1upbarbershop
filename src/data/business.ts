@@ -220,6 +220,10 @@ export const serviceGroups: ServiceGroup[] = [
 export const pricesPublished = serviceGroups.some((g) => g.services.some((s) => s.price !== ''));
 
 /* ─── Barbers ──────────────────────────────────────────────────────────────
+ * Known from the shop's Instagram: the owners are @brandowontmiss and
+ * @ej.fades. Their real names, specialties, bios and photos are still needed
+ * before they can be published — see SETUP.md.
+ *
  * TODO: no barber names, specialties, bios or photos supplied yet.
  * Fill this array and the section renders real profiles automatically;
  * while it is empty the section shows a clearly-marked placeholder.
@@ -234,6 +238,8 @@ export type Barber = {
   imageAlt: string;
   /** Personal booking link. Empty = falls back to the shop-wide booking action. */
   bookingUrl: string;
+  /** Personal Instagram URL. Empty = not shown. */
+  instagram: string;
 };
 
 export const barbers: Barber[] = [];

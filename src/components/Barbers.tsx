@@ -1,13 +1,15 @@
 import { barbers, barberPlaceholderImages, bookLabel, bookingReady } from '../data/business';
 import { BookButton, Code, EditorNote, NeedsInfo, Reveal, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
+import { InstagramIcon } from './Icons';
 
 /** Shown until real barber names, specialties, bios and photos are supplied. */
 function BarberPlaceholders() {
   return (
     <>
       <EditorNote>
-        Barber names, specialties, bios and photos have not been supplied. Fill the <Code>barbers</Code> array in{' '}
-        <Code>src/data/business.ts</Code> and real profiles replace these cards.
+        Barber names, specialties, bios and photos have not been supplied. The shop’s Instagram names the owners as{' '}
+        <Code>@brandowontmiss</Code> and <Code>@ej.fades</Code> — add their real names and the rest to the{' '}
+        <Code>barbers</Code> array in <Code>src/data/business.ts</Code> and real profiles replace these cards.
       </EditorNote>
 
       <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -71,6 +73,17 @@ export function Barbers() {
                     <p className="mt-3 text-[0.82rem] font-semibold uppercase tracking-[0.1em] text-muted">
                       In the shop: {barber.days}
                     </p>
+                  )}
+                  {barber.instagram && (
+                    <a
+                      href={barber.instagram}
+                      target="_blank"
+                      rel="noopener"
+                      className="mt-3 inline-flex min-h-[44px] items-center gap-2 text-[0.85rem] font-semibold text-muted hover:text-brand-lift"
+                    >
+                      <InstagramIcon className="h-[18px] w-[18px]" />
+                      {barber.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '@').replace(/\/$/, '')}
+                    </a>
                   )}
                   {barber.bookingUrl ? (
                     <a
