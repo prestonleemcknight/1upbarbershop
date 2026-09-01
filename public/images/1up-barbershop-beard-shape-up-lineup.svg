@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250" role="img" aria-label="Beard shape-up and lineup">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#161C25"/><stop offset="1" stop-color="#0E131A"/></linearGradient>
+<pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="10" stroke="#ffffff" stroke-opacity="0.028" stroke-width="3"/></pattern>
+</defs>
+<rect width="1000" height="1250" fill="url(#g)"/>
+<rect width="1000" height="1250" fill="url(#p)"/>
+<rect x="0" y="1235" width="340" height="15" fill="#1B5CE0"/>
+<g fill="#8C9AAB" font-family="Archivo, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="600" text-anchor="middle">
+<text x="500" y="599">PHOTO PLACEHOLDER</text>
+<text x="500" y="671.8" font-size="32" font-weight="500" fill="#6E7B8B">Beard shape-up and lineup</text>
+</g>
+</svg>
