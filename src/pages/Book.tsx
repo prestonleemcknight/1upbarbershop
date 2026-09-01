@@ -1,93 +1,83 @@
-import { Section, SectionHeading } from '../components/ui';
-import { business } from '../data/business';
+import { Link } from 'react-router-dom';
+import { Section, SectionHeading, BookButton, buttonPrimary, buttonGhostDark, EditorNote } from '../components/ui';
+import { business, bookingReady, policies } from '../data/business';
 
 export default function BookPage() {
   return (
     <Section id="book">
-      <div className="mx-auto max-w-2xl">
-        <SectionHeading id="book" title="Book an Appointment" />
+      <div className="mx-auto max-w-4xl">
+        <SectionHeading
+          id="book"
+          eyebrow="Booking"
+          title="Book an Appointment"
+          lede="Lock in a chair ahead of time, or walk in — both work, seven days a week."
+        />
 
-        <div className="space-y-8">
-          {/* Booking Options */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Booksy */}
-            <div className="rounded-lg border-2 border-brand bg-brand/5 p-8 text-center">
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Book Online</h3>
-              <p className="text-slate-700 mb-6">
-                Schedule your appointment directly on Booksy for guaranteed availability
-              </p>
-              <a
-                href="#"
-                className="inline-block rounded-lg bg-brand hover:bg-brand/90 text-white font-bold py-3 px-8 transition-colors"
-              >
-                Open Booksy
-              </a>
-            </div>
-
-            {/* Call */}
-            <div className="rounded-lg border border-slate-300 bg-slate-50 p-8 text-center">
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Call to Book</h3>
-              <p className="text-slate-700 mb-6">
-                Speak with our team directly to schedule or ask questions
-              </p>
-              <a
-                href={business.phoneHref}
-                className="inline-block rounded-lg border-2 border-brand text-brand hover:bg-brand/5 font-bold py-3 px-8 transition-colors"
-              >
-                📞 {business.phoneDisplay}
-              </a>
-            </div>
-
-            {/* Walk-In */}
-            <div className="rounded-lg border border-slate-300 bg-slate-50 p-8 text-center">
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Walk-Ins Welcome</h3>
-              <p className="text-slate-700 mb-6">
-                No appointment needed! Walk in during business hours and we'll take great care of you
-              </p>
-              <div className="inline-block text-slate-700">
-                <p className="font-semibold">Open Today</p>
-                <p className="text-sm">Check hours on the location page</p>
-              </div>
-            </div>
-
-            {/* Specific Barber */}
-            <div className="rounded-lg border border-slate-300 bg-slate-50 p-8 text-center">
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Book Your Barber</h3>
-              <p className="text-slate-700 mb-6">
-                Want a specific barber? Visit our Barbers page and call or book directly
-              </p>
-              <a
-                href="/contact"
-                className="inline-block rounded-lg border-2 border-brand text-brand hover:bg-brand/5 font-bold py-3 px-8 transition-colors"
-              >
-                Meet Our Team
-              </a>
-            </div>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          <div className="rounded-[6px] border border-brand/45 bg-brand/8 p-7">
+            <h3 className="text-[1.15rem] font-extrabold text-bone">Book online</h3>
+            <p className="mt-3 text-[0.98rem] leading-relaxed text-bone-2">
+              Pick your barber, service and time. Fastest way to guarantee a chair.
+            </p>
+            <BookButton className={`${buttonPrimary} mt-6 !min-h-[52px]`} withArrow={false}>
+              {bookingReady ? 'Open Booksy' : 'Call to book'}
+            </BookButton>
           </div>
 
-          {/* Booking Info */}
-          <div className="rounded-lg bg-slate-50 p-8">
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Before Your Visit</h3>
-            <ul className="space-y-3 text-slate-700">
-              <li className="flex gap-3">
-                <span className="text-brand font-bold">✓</span>
-                <span>Appointments ensure minimal wait time</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-brand font-bold">✓</span>
-                <span>Walk-ins served on a first-come, first-served basis</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-brand font-bold">✓</span>
-                <span>Please arrive a few minutes early</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-brand font-bold">✓</span>
-                <span>Cash and card payments accepted</span>
-              </li>
-            </ul>
+          <div className="rounded-[6px] border border-hairline bg-ink-2 p-7">
+            <h3 className="text-[1.15rem] font-extrabold text-bone">Call the shop</h3>
+            <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">
+              Talk to someone directly, ask about a service or check the wait.
+            </p>
+            <a href={business.phoneHref} className={`${buttonGhostDark} mt-6 !min-h-[52px]`}>
+              {business.phoneDisplay}
+            </a>
+          </div>
+
+          <div className="rounded-[6px] border border-hairline bg-ink-2 p-7">
+            <h3 className="text-[1.15rem] font-extrabold text-bone">Walk in</h3>
+            <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">{policies.walkInNote}</p>
+            <Link to="/location" className={`${buttonGhostDark} mt-6 !min-h-[52px]`}>
+              Hours &amp; directions
+            </Link>
+          </div>
+
+          <div className="rounded-[6px] border border-hairline bg-ink-2 p-7">
+            <h3 className="text-[1.15rem] font-extrabold text-bone">Book a specific barber</h3>
+            <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">
+              Tap a chair on the team page to call or book straight into it.
+            </p>
+            <Link to="/contact" className={`${buttonGhostDark} mt-6 !min-h-[52px]`}>
+              Meet the team
+            </Link>
           </div>
         </div>
+
+        <div className="mt-10 rounded-[6px] border border-hairline bg-ink-2 p-7">
+          <h3 className="eyebrow text-muted">Before your visit</h3>
+          <ul className="mt-4 space-y-2.5">
+            {[
+              'Appointments keep your wait to a minimum',
+              'Walk-ins are taken first come, first served',
+              'Turn up a few minutes early where you can',
+              policies.refunds,
+            ].map((item) => (
+              <li key={item} className="flex gap-3 text-[0.96rem] leading-relaxed text-bone-2">
+                <span aria-hidden className="mt-[0.15em] shrink-0 font-bold text-brand-lift">
+                  &check;
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {!bookingReady && (
+          <EditorNote>
+            No online booking link on file yet, so every booking action falls back to click-to-call. Paste the Booksy
+            URL into <code>booking.url</code> in <code>src/data/business.ts</code> and all of them switch over at once.
+          </EditorNote>
+        )}
       </div>
     </Section>
   );

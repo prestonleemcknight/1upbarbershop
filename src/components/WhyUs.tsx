@@ -1,6 +1,6 @@
 import { differentiators } from '../data/content';
 import { Reveal, Section, SectionHeading } from './ui';
-import { asset } from '../lib/asset';
+import { MapCard } from './MapCard';
 
 export function WhyUs() {
   return (
@@ -34,20 +34,10 @@ export function WhyUs() {
         </div>
 
         <Reveal className="lg:pt-8">
-          <figure className="overflow-hidden rounded-[4px] bg-ink">
-            <img
-              src={asset('/images/1up-barbershop-interior-barber-chairs.svg')}
-              alt="Station, mirror and tools at 1UP Barbershop"
-              width={1200}
-              height={900}
-              loading="lazy"
-              decoding="async"
-              className="aspect-[4/3] w-full object-cover"
-            />
-            <figcaption className="border-t border-hairline px-5 py-4 text-[0.85rem] leading-relaxed text-muted">
-              A clean shop, a comfortable chair and weeknight hours until 7 — the details that decide whether you come back.
-            </figcaption>
-          </figure>
+          <MapCard tone="light" />
+          <p className="mt-3 text-[0.85rem] leading-relaxed text-muted-ink">
+            Right on the W Loop 1604 access road in Shaenfield — open the pin in whichever maps app you use.
+          </p>
         </Reveal>
       </div>
     </Section>

@@ -1,0 +1,150 @@
+import { useState } from 'react';
+import { chairRoster, rosterIsDemo, business, bookHref, bookLinkProps, bookingReady } from '../data/business';
+import { asset } from '../lib/asset';
+import { EditorNote, Reveal } from './ui';
+import { PhoneIcon } from './Icons';
+
+/**
+ * The shop photo behind the chair row. Optional — without it the row sits on
+ * flat ink, which still reads as designed rather than broken.
+ */
+const SHOP_PHOTO = '/images/1up-barbershop-chairs.png';
+
+function ChairIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} fill="none" aria-hidden focusable="false">
+      {/* headrest + back */}
+      <rect x="14" y="5" width="20" height="7" rx="2.5" fill="currentColor" opacity="0.9" />
+      <rect x="12" y="14" width="24" height="13" rx="3" fill="currentColor" />
+      {/* arms */}
+      <rect x="7" y="21" width="6" height="4" rx="2" fill="currentColor" opacity="0.75" />
+      <rect x="35" y="21" width="6" height="4" rx="2" fill="currentColor" opacity="0.75" />
+      {/* post + base */}
+      <rect x="21.5" y="27" width="5" height="10" rx="1.5" fill="currentColor" opacity="0.8" />
+      <path d="M13 43c0-3.3 4.9-6 11-6s11 2.7 11 6z" fill="currentColor" opacity="0.65" />
+    </svg>
+  );
+}
+
+export function ChairPicker() {
+  const [selected, setSelected] = useState<number | null>(null);
+  const [hasPhoto, setHasPhoto] = useState(true);
+  const active = selected === null ? null : chairRoster[selected];
+
+  return (
+    <div>
+      <div className="relative isolate overflow-hidden rounded-[6px] border border-hairline bg-ink-2">
+        {hasPhoto && (
+          <img
+            src={asset(SHOP_PHOTO)}
+            onError={() => setHasPhoto(false)}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40"
+          />
+        )}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(11,15,20,0.72)_0%,rgba(11,15,20,0.88)_100%)]"
+        />
+
+        <div className="px-5 py-8 sm:px-8 sm:py-10">
+          <p className="eyebrow mb-6 text-center text-muted">Tap a chair to meet the barber</p>
+
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            {chairRoster.map((barber, i) => {
+              const isOpen = selected === i;
+              return (
+                <li key={i}>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls="chair-detail"
+                    className={`flex w-full flex-col items-center gap-2 rounded-[5px] border px-2 py-4 transition-colors ${
+                      isOpen
+                        ? 'border-brand bg-brand/15 text-brand-lift'
+                        : 'border-hairline bg-ink/50 text-muted hover:border-brand-lift/60 hover:text-bone'
+                    }`}
+                  >
+                    <ChairIcon className="h-9 w-9" />
+                    <span className="text-[0.7rem] font-bold uppercase tracking-[0.12em]">Chair {i + 1}</span>
+                    <span className="text-[0.82rem] font-semibold text-bone">{barber.name}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+
+      {/* Detail panel — toggled open by the chair above it. */}
+      <div id="chair-detail" hidden={!active} className="mt-4">
+        {active && (
+          <Reveal className="rounded-[6px] border border-brand/40 bg-ink-2 p-6 sm:p-8">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="eyebrow text-brand-lift">Chair {(selected ?? 0) + 1}</p>
+                <h3 className="display-xl mt-1 text-[clamp(1.5rem,4vw,2.1rem)]">{active.name}</h3>
+                {active.specialty && <p className="mt-2 text-[0.95rem] text-muted">{active.specialty}</p>}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="rounded-[4px] border border-hairline px-3 py-2 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-muted hover:text-bone"
+              >
+                Close
+              </button>
+            </div>
+
+            {active.bio && <p className="mt-4 max-w-prose text-[0.98rem] leading-relaxed text-bone-2">{active.bio}</p>}
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <a
+                href={active.phone ? `tel:${active.phone}` : business.phoneHref}
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[4px] border border-hairline text-[0.85rem] font-bold uppercase tracking-[0.08em] text-bone hover:border-brand-lift hover:text-brand-lift"
+              >
+                <PhoneIcon className="h-[17px] w-[17px]" />
+                {active.phone ?? business.phoneDisplay}
+              </a>
+
+              <a
+                href={active.bookingUrl || bookHref}
+                {...(active.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : bookLinkProps)}
+                className="inline-flex min-h-[48px] items-center justify-center rounded-[4px] bg-brand text-[0.85rem] font-bold uppercase tracking-[0.08em] text-white hover:bg-brand-deep"
+              >
+                {bookingReady || active.bookingUrl ? 'Book on Booksy' : 'Call to book'}
+              </a>
+
+              <a
+                href={active.instagram || business.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-[4px] border border-hairline text-[0.85rem] font-bold uppercase tracking-[0.08em] text-bone hover:border-brand-lift hover:text-brand-lift"
+              >
+                Instagram
+              </a>
+            </div>
+
+            {active.demo && (
+              <EditorNote>
+                Stand-in chair. The name is a placeholder and the buttons point at the shop line, booking action and
+                Instagram — swap in the real barber once names, numbers and personal Booksy links are supplied.
+              </EditorNote>
+            )}
+          </Reveal>
+        )}
+      </div>
+
+      {rosterIsDemo && !active && (
+        <EditorNote>
+          These ten chairs are stand-ins so the click-to-open interaction can be demonstrated. Fill the{' '}
+          <code>barbers</code> array in <code>src/data/business.ts</code> and the real roster replaces them
+          automatically.
+        </EditorNote>
+      )}
+    </div>
+  );
+}

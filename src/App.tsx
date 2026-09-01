@@ -10,6 +10,7 @@ import ContactPage from './pages/Contact';
 import BookPage from './pages/Book';
 import EmploymentPage from './pages/Employment';
 import SocialsPage from './pages/Socials';
+import GiftCardsPage from './pages/GiftCards';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/book" element={<BookPage />} />
           <Route path="/employment" element={<EmploymentPage />} />
           <Route path="/socials" element={<SocialsPage />} />
+          <Route path="/gift-cards" element={<GiftCardsPage />} />
         </Routes>
       </main>
       <Footer />

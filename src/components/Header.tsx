@@ -81,14 +81,23 @@ export function Header() {
         scrolled || open ? 'border-hairline bg-ink/95 backdrop-blur-md' : 'border-transparent bg-ink/70 backdrop-blur-sm'
       }`}
     >
-      {/* Utility strip. Keeps the phone reachable without crowding the nav row.
-          Desktop only — on mobile the sticky bottom bar already carries Call. */}
-      <div className="hidden border-b border-hairline/60 lg:block">
-        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-6 px-8 text-[0.72rem] font-bold uppercase tracking-[0.14em]">
-          <p className="text-muted">
-            Walk-ins welcome <span className="mx-2 text-hairline">·</span> Open 7 days a week
+      {/* Promo strip. Shown at every width, which also keeps the header a uniform
+          108px (36 + 72) so the hero can offset by one figure. */}
+      <div className="border-b border-hairline/60">
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-5 text-[0.72rem] font-bold uppercase tracking-[0.14em] sm:px-8">
+          <p className="flex min-w-0 items-center gap-3 text-bone">
+            <span className="truncate">Gift cards now available!</span>
+            <Link
+              to="/gift-cards"
+              className="shrink-0 whitespace-nowrap text-brand-lift underline underline-offset-4 transition-colors hover:text-bone"
+            >
+              Purchase now
+            </Link>
           </p>
-          <a href={business.phoneHref} className="inline-flex items-center gap-2 text-bone transition-colors hover:text-brand-lift">
+          <a
+            href={business.phoneHref}
+            className="hidden shrink-0 items-center gap-2 text-muted transition-colors hover:text-brand-lift sm:inline-flex"
+          >
             <PhoneIcon className="h-[15px] w-[15px]" />
             {business.phoneDisplay}
           </a>

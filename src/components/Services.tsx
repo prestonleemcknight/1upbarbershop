@@ -1,4 +1,4 @@
-import { serviceGroups, pricesPublished, business } from '../data/business';
+import { serviceGroups, pricesConfirmed, business } from '../data/business';
 import { BookButton, Code, EditorNote, NeedsInfo, Reveal, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
 
 export function Services() {
@@ -16,9 +16,10 @@ export function Services() {
         }
       />
 
-      {!pricesPublished && (
+      {!pricesConfirmed && (
         <EditorNote>
-          Service prices and durations have not been supplied yet. Add them in <Code>src/data/business.ts</Code> and
+          The prices and durations shown are demo figures in the local market range, not the shop&rsquo;s confirmed
+          menu. Correct them in <Code>src/data/business.ts</Code>, set <Code>pricesConfirmed</Code> to true, and
           every row updates automatically.
         </EditorNote>
       )}

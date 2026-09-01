@@ -3,6 +3,7 @@ import { business, gallery, galleryCategories, type GalleryItem } from '../data/
 import { Code, EditorNote, Section, SectionHeading, buttonGhostDark } from './ui';
 import { CloseIcon, InstagramIcon } from './Icons';
 import { asset } from '../lib/asset';
+import { ChairPicker } from './ChairPicker';
 
 type Filter = 'All' | (typeof galleryCategories)[number];
 const filters: Filter[] = ['All', ...galleryCategories];
@@ -131,15 +132,22 @@ export function Gallery() {
       <div className="flex flex-wrap items-end justify-between gap-6">
         <SectionHeading
           id="gallery"
-          eyebrow="The Work"
-          title={<>Cuts out of this chair</>}
-          lede="Real work from the shop — fades, classic cuts, beard work and full transformations."
+          eyebrow="The Chairs"
+          title={<>Choose a Barber</>}
+          lede="Ten chairs in the shop. Tap one to see who cuts there, call them or book straight into their chair."
         />
         <a href={business.instagram} target="_blank" rel="noopener" className={`${buttonGhostDark} shrink-0`}>
           <InstagramIcon className="h-[18px] w-[18px]" />
           {business.instagramHandle}
         </a>
       </div>
+
+      <div className="mt-10">
+        <ChairPicker />
+      </div>
+
+      {/* Work photos keep their place below the picker, under their own label. */}
+      <h3 className="eyebrow mt-16 border-t border-hairline pt-10 text-brand-lift">Recent work</h3>
 
       {anyPlaceholder && (
         <EditorNote>

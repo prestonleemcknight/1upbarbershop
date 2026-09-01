@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { business, bookLabelLong, hours, policies, ratingInfo } from '../data/business';
+import { business, bookLabelLong, hours, policies, ratingInfo, reviews, reviewsReady } from '../data/business';
 import { formatRange } from '../lib/hours';
 import { asset } from '../lib/asset';
 import { useShopStatus } from '../lib/useShopClock';
@@ -49,10 +49,10 @@ export function Hero() {
 
   return (
     /* Pulled up under the sticky header so the photo runs behind the nav, then
-       padded back down so the content clears it. Header is 72px, 108px at lg. */
+       padded back down so the content clears it. The header is a uniform 108px (36px promo strip + 72px nav). */
     <section
       id="top"
-      className="relative isolate -mt-[72px] flex min-h-[92svh] flex-col overflow-hidden bg-ink pt-[72px] lg:-mt-[108px] lg:pt-[108px]"
+      className="relative isolate -mt-[108px] flex min-h-[94svh] flex-col overflow-hidden bg-ink pt-[108px]"
     >
       {/* Hero image: eager + high priority, it is the LCP element. */}
       {hasPhoto && (
@@ -150,6 +150,41 @@ export function Hero() {
             </div>
           )}
         </dl>
+
+        {/* Reviews rail — reserved inside the hero box, under the CTA. */}
+        <div className="mt-8 border-t border-hairline pt-8">
+          <p className="eyebrow mb-4 text-muted">What people say</p>
+          <ul className="grid gap-3 sm:grid-cols-3">
+            {reviews.map((review, i) => (
+              <li
+                key={i}
+                className={`rounded-[5px] border px-4 py-4 text-[0.9rem] leading-relaxed ${
+                  reviewsReady
+                    ? 'border-hairline bg-ink-2/60 text-bone-2'
+                    : 'border-dashed border-hairline/70 bg-ink-2/30 text-muted'
+                }`}
+              >
+                {review.quote ? (
+                  <>
+                    <p className="text-bone-2">&ldquo;{review.quote}&rdquo;</p>
+                    <p className="mt-2 text-[0.8rem] font-bold uppercase tracking-[0.1em] text-brand-lift">
+                      {review.author} &middot; {review.source}
+                    </p>
+                  </>
+                ) : (
+                  <p className="flex min-h-[3.5em] items-center text-[0.82rem] font-semibold uppercase tracking-[0.1em]">
+                    Google review slot {i + 1}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+          {!reviewsReady && (
+            <p className="mt-3 text-[0.8rem] text-muted">
+              Three real Google reviews drop straight into these slots — nothing is invented here.
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

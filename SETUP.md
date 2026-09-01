@@ -97,6 +97,13 @@ but one with some depth toward the edges (chairs, stations, lighting) looks
 best. A `.webp` works too; if you use one, change `HERO_PHOTO` at the top of
 `src/components/Hero.tsx` to match the extension.
 
+### The chair-picker backdrop (optional)
+
+The "Choose a Barber" / "Meet Our Barbers" chair grid sits on an optional shop
+photo at `public/images/1up-barbershop-chairs.png`. Without it the grid sits on
+flat ink and still works — the chairs are drawn, not hotspots on a photo, so
+nothing has to line up pixel-for-pixel.
+
 ### Everything else
 
 Every other image in `public/images/` is a generated placeholder that says
@@ -126,8 +133,12 @@ Work top to bottom. The site is publishable from the moment section 1 is done �
 everything after that makes it better.
 
 - [ ] Paste the booking URL into `booking.url` (unblocks 18 CTAs at once)
-- [ ] Fill in all 10 service prices
-- [ ] Fill in all 10 service durations
+- [ ] Replace the 10 demo service prices with the real menu, then set
+      `pricesConfirmed = true` in `src/data/business.ts`
+- [ ] Confirm the 10 service durations
+- [ ] Confirm the refund / no-show wording in `policies.refunds`
+- [ ] Point the header's "Purchase now" link at real gift-card checkout
+      (`src/pages/GiftCards.tsx`)
 - [ ] Add every barber: name, specialty, bio, working days, booking link, Instagram
       (owners are @brandowontmiss and @ej.fades — real names needed)
 - [ ] Drop the shop-floor photo at `public/images/1up-barbershop-hero-interior.jpg`

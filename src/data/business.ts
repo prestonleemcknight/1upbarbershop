@@ -44,6 +44,12 @@ export const business = {
 
   googleMapsUrl:
     'https://www.google.com/maps?rlz=1C1VDKB_enUS1170US1170&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRirAjIHCAIQIRirAjIHCAMQIRirAjIHCAQQIRiPAjIHCAUQIRiPAtIBCTE0NjI4ajBqN6gCALACAA&um=1&ie=UTF-8&fb=1&gl=us&sa=X&geocode=KWkm3wLraVyGMXpimKGJkBXt&daddr=7807+W+Loop+1604+N,+San+Antonio,+TX+78254',
+  /** Opens the address in Apple Maps on iOS/macOS. */
+  appleMapsUrl:
+    'https://maps.apple.com/?address=7807%20W%20Loop%201604%20N,%20San%20Antonio,%20TX%2078254&q=1UP%20Barbershop',
+  /** Keyless Google Maps embed pinned to the street address. */
+  mapEmbedUrl:
+    'https://www.google.com/maps?q=7807+W+Loop+1604+N,+San+Antonio,+TX+78254&output=embed',
   /** TODO: paste the shop's "Write a review" / reviews link from Google Business Profile. */
   googleReviewsUrl: '',
 } as const;
@@ -96,6 +102,13 @@ export const policies = {
   latePolicy: '',
   /** TODO: confirm the nearest cross street / landmark for the FAQ + directions. */
   landmark: '',
+  /**
+   * Refund / no-show terms. Stated plainly so a customer reads it before
+   * booking rather than after being charged.
+   * TODO: owner to confirm the exact wording and the grace period.
+   */
+  refunds:
+    'Booked appointments are held for you. A no-call, no-show is charged 50% of the booked service before your next appointment. Call or message ahead and there is no charge — we will just move you.',
 } as const;
 
 /* ─── First-visit offer ────────────────────────────────────────────────────
@@ -134,32 +147,32 @@ export const serviceGroups: ServiceGroup[] = [
       {
         name: 'Precision Fade',
         description: 'Low, mid, high or skin. Blended clean, shaped to your head, not a guard number.',
-        price: '',
-        duration: '',
+        price: '$35',
+        duration: '45 min',
       },
       {
         name: 'Taper',
         description: 'Tight around the ears and neck, length kept on top. The low-maintenance standard.',
-        price: '',
-        duration: '',
+        price: '$30',
+        duration: '40 min',
       },
       {
         name: 'Scissor Cut & Style',
         description: 'Scissor-over-comb through the top for texture and movement. Styled before you leave.',
-        price: '',
-        duration: '',
+        price: '$35',
+        duration: '45 min',
       },
       {
         name: 'Kids Cut (12 & under)',
         description: 'Patient barbers, no rush, no bribes needed. Same lineup, same finish.',
-        price: '',
-        duration: '',
+        price: '$25',
+        duration: '30 min',
       },
       {
         name: 'Loc Maintenance',
         description: 'Retwist, shape-up and clean edges for locs at any stage.',
-        price: '',
-        duration: '',
+        price: '$65',
+        duration: '90 min',
       },
     ],
   },
@@ -171,14 +184,14 @@ export const serviceGroups: ServiceGroup[] = [
       {
         name: 'Beard Grooming',
         description: 'Shaped, trimmed to length and balanced to your jawline and cheek line.',
-        price: '',
-        duration: '',
+        price: '$20',
+        duration: '25 min',
       },
       {
         name: 'Lineup / Edge-Up',
         description: 'Hairline, temples and beard edges squared off with the trimmer and razor.',
-        price: '',
-        duration: '',
+        price: '$15',
+        duration: '20 min',
       },
     ],
   },
@@ -190,8 +203,8 @@ export const serviceGroups: ServiceGroup[] = [
       {
         name: 'Cut + Beard',
         description: 'Any haircut paired with a full beard groom, booked as one appointment.',
-        price: '',
-        duration: '',
+        price: '$50',
+        duration: '70 min',
       },
     ],
   },
@@ -203,14 +216,14 @@ export const serviceGroups: ServiceGroup[] = [
       {
         name: 'Hair Design',
         description: 'Hard parts, lines and freehand designs cut into the fade.',
-        price: '',
-        duration: '',
+        price: '$10',
+        duration: '15 min',
       },
       {
         name: 'Eyebrow Cleanup',
         description: 'Trimmed and edged to match the rest of the cut.',
-        price: '',
-        duration: '',
+        price: '$8',
+        duration: '10 min',
       },
     ],
   },
@@ -218,6 +231,14 @@ export const serviceGroups: ServiceGroup[] = [
 
 /** Flips to true automatically once real prices are filled in above. */
 export const pricesPublished = serviceGroups.some((g) => g.services.some((s) => s.price !== ''));
+
+/**
+ * The prices above are demo figures placed in the local market range so the
+ * page can be shown to the owner with real-looking numbers. Set this to true
+ * once the owner confirms the actual menu — the "not confirmed" banner on the
+ * services page disappears on its own.
+ */
+export const pricesConfirmed = false;
 
 /* ─── Barbers ──────────────────────────────────────────────────────────────
  * Known from the shop's Instagram: the owners are @brandowontmiss and
@@ -240,9 +261,40 @@ export type Barber = {
   bookingUrl: string;
   /** Personal Instagram URL. Empty = not shown. */
   instagram: string;
+  /** Direct number. Empty = falls back to the shop line. */
+  phone?: string;
+  /** Marks a stand-in profile so the UI can label it honestly. */
+  demo?: boolean;
 };
 
 export const barbers: Barber[] = [];
+
+/* ─── Chair picker ─────────────────────────────────────────────────────────
+ * Ten stand-in chairs so the click-a-chair interaction can be demonstrated
+ * before real staff details exist. Every one is flagged `demo: true`, so the
+ * UI labels it as a placeholder and never passes it off as a real person.
+ * The phone and booking action point at the shop's real line, which is
+ * accurate: any chair is reachable on it.
+ *
+ * TODO: replace with the real roster — see SETUP.md.
+ * ------------------------------------------------------------------------ */
+export const chairCount = 10;
+
+export const demoChairs: Barber[] = Array.from({ length: chairCount }, (_, i) => ({
+  name: `Barber ${i + 1}`,
+  specialty: '',
+  bio: '',
+  days: '',
+  image: '',
+  imageAlt: '',
+  bookingUrl: '',
+  instagram: '',
+  demo: true,
+}));
+
+/** Real roster when it exists, stand-ins until then. */
+export const chairRoster: Barber[] = barbers.length > 0 ? barbers : demoChairs;
+export const rosterIsDemo = barbers.length === 0;
 
 /** Portraits ready to pair with real barbers once names are supplied. */
 export const barberPlaceholderImages = [

@@ -1,102 +1,88 @@
 import { Section, SectionHeading, EditorNote } from '../components/ui';
-import { barbers } from '../data/business';
+import { business } from '../data/business';
+import { Logo } from '../components/Logo';
+import { InstagramIcon } from '../components/Icons';
+
+/** Square brand tile. The Instagram one carries the shop's own mark. */
+function SocialTile({
+  href,
+  network,
+  handle,
+  blurb,
+  children,
+}: {
+  href: string;
+  network: string;
+  handle: string;
+  blurb: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex flex-col rounded-[6px] border border-hairline bg-ink-2 p-7 text-center transition-colors hover:border-brand-lift"
+    >
+      <span className="mx-auto flex aspect-square w-full max-w-[190px] items-center justify-center rounded-[6px] border border-hairline bg-ink transition-colors group-hover:border-brand/60">
+        {children}
+      </span>
+      <span className="mt-6 text-[1.15rem] font-extrabold uppercase tracking-[0.1em] text-bone group-hover:text-brand-lift">
+        {network}
+      </span>
+      <span className="mt-1 text-[0.9rem] font-semibold text-brand-lift">{handle}</span>
+      <span className="mt-3 text-[0.92rem] leading-relaxed text-muted">{blurb}</span>
+    </a>
+  );
+}
 
 export default function SocialsPage() {
-  const shopInstagram = 'PLACEHOLDER_SHOP_INSTAGRAM';
-  const shopTikTok = 'PLACEHOLDER_SHOP_TIKTOK';
+  const hasTikTok = business.tiktok.length > 0;
 
   return (
     <Section id="socials">
       <div className="mx-auto max-w-4xl">
-        <SectionHeading id="socials" title="Follow Us on Social Media" />
+        <SectionHeading
+          id="socials"
+          eyebrow="Socials"
+          title="Follow the shop"
+          lede="Fresh cuts, transformations and what is going on in the shop day to day."
+        />
 
-        {/* Shop Social Media */}
-        <div className="mb-12">
-          <h3 className="text-2xl font-bold text-slate-900 mb-6">1UP Barbershop</h3>
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Instagram */}
-            <a
-              href={`https://instagram.com/${shopInstagram}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group rounded-lg border-2 border-slate-300 hover:border-brand p-8 text-center transition-all hover:shadow-lg"
-            >
-              <div className="text-6xl mb-4">📷</div>
-              <h4 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand">
-                Instagram
-              </h4>
-              <p className="text-slate-600 text-sm mb-4">@{shopInstagram}</p>
-              <p className="text-slate-700 text-sm">
-                Follow for fresh cuts, behind-the-scenes, and shop updates
-              </p>
-            </a>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          <SocialTile
+            href={business.instagram}
+            network="Instagram"
+            handle={business.instagramHandle}
+            blurb="Fresh cuts, behind the scenes and shop updates."
+          >
+            <Logo className="h-[62%] w-[62%]" title="1UP Barbershop on Instagram" />
+          </SocialTile>
 
-            {/* TikTok */}
-            <a
-              href={`https://tiktok.com/@${shopTikTok}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group rounded-lg border-2 border-slate-300 hover:border-brand p-8 text-center transition-all hover:shadow-lg"
-            >
-              <div className="text-6xl mb-4">🎵</div>
-              <h4 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand">
-                TikTok
-              </h4>
-              <p className="text-slate-600 text-sm mb-4">@{shopTikTok}</p>
-              <p className="text-slate-700 text-sm">
-                Check out our trending cuts and barbershop content
-              </p>
-            </a>
-          </div>
-          <EditorNote>
-            Replace PLACEHOLDER_SHOP_INSTAGRAM and PLACEHOLDER_SHOP_TIKTOK with actual shop social handles
-          </EditorNote>
-        </div>
-
-        {/* Barber Social Media */}
-        <div>
-          <h3 className="text-2xl font-bold text-slate-900 mb-6">Follow Our Barbers</h3>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {barbers.map((barber, index) => (
-              <div key={index} className="rounded-lg border border-slate-300 p-6">
-                <div className="flex gap-3 mb-4">
-                  <div className="text-4xl">💈</div>
-                  <div>
-                    <h4 className="font-bold text-slate-900">{barber.name}</h4>
-                    {barber.instagram && (
-                      <a
-                        href={`https://instagram.com/${barber.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-brand hover:underline font-semibold"
-                      >
-                        @{barber.instagram}
-                      </a>
-                    )}
-                    {!barber.instagram && (
-                      <p className="text-sm text-slate-500 italic">No Instagram yet</p>
-                    )}
-                  </div>
-                </div>
-                {barber.instagram && (
-                  <a
-                    href={`https://instagram.com/${barber.instagram}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block text-sm text-brand hover:underline font-semibold"
-                  >
-                    View Profile →
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-          {barbers.some((b) => !b.instagram) && (
-            <EditorNote>
-              Add Instagram handles to barber profiles in src/data/business.ts for them to appear here
-            </EditorNote>
+          {hasTikTok ? (
+            <SocialTile href={business.tiktok} network="TikTok" handle="" blurb="Short-form cuts and shop content.">
+              <Logo className="h-[62%] w-[62%]" title="1UP Barbershop on TikTok" />
+            </SocialTile>
+          ) : (
+            <div className="flex flex-col rounded-[6px] border border-dashed border-hairline bg-ink-2/40 p-7 text-center">
+              <span className="mx-auto flex aspect-square w-full max-w-[190px] items-center justify-center rounded-[6px] border border-dashed border-hairline">
+                <InstagramIcon className="h-10 w-10 text-muted" />
+              </span>
+              <span className="mt-6 text-[1.15rem] font-extrabold uppercase tracking-[0.1em] text-muted">TikTok</span>
+              <span className="mt-3 text-[0.92rem] leading-relaxed text-muted">
+                No TikTok handle on file yet. Add one and this tile goes live.
+              </span>
+            </div>
           )}
         </div>
+
+        {!hasTikTok && (
+          <EditorNote>
+            Add the shop&rsquo;s TikTok (and Facebook, if there is one) to <code>business.tiktok</code> in{' '}
+            <code>src/data/business.ts</code> and the tile fills in automatically. Barber-level socials appear on the
+            Contact page once the real roster is added.
+          </EditorNote>
+        )}
       </div>
     </Section>
   );

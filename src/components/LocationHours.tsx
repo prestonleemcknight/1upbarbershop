@@ -3,6 +3,7 @@ import { formatRange } from '../lib/hours';
 import { useShopStatus } from '../lib/useShopClock';
 import { BookButton, NeedsInfo, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
 import { PhoneIcon, PinIcon } from './Icons';
+import { MapCard } from './MapCard';
 
 function HoursTable() {
   const todayIndex = useShopStatus()?.today?.dayIndex ?? null;
@@ -39,91 +40,6 @@ function HoursTable() {
   );
 }
 
-/** Stylised map card. A linked still image keeps the page free of third-party scripts and cookies. */
-function MapCard() {
-  return (
-    <a
-      href={business.googleMapsUrl}
-      target="_blank"
-      rel="noopener"
-      className="group block overflow-hidden rounded-[4px] border border-hairline bg-ink transition-colors hover:border-brand-lift"
-    >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink-3">
-        <svg
-          viewBox="0 0 640 400"
-          className="absolute inset-0 h-full w-full"
-          aria-hidden
-          focusable="false"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <rect width="640" height="400" fill="#131a22" />
-          {/* City blocks */}
-          <g fill="#171f29">
-            <rect x="24" y="24" width="150" height="86" rx="3" />
-            <rect x="220" y="24" width="120" height="86" rx="3" />
-            <rect x="390" y="24" width="110" height="60" rx="3" />
-            <rect x="24" y="270" width="130" height="106" rx="3" />
-            <rect x="205" y="292" width="150" height="84" rx="3" />
-            <rect x="420" y="250" width="170" height="126" rx="3" />
-          </g>
-          {/* Surface streets */}
-          <g stroke="#212b37" strokeWidth="9" strokeLinecap="square">
-            <path d="M0 140h640M0 250h640M190 0v400M380 0v400M540 0v400" />
-          </g>
-          {/* The loop */}
-          <path
-            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
-            stroke="#14356f"
-            strokeWidth="28"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <path
-            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
-            stroke="#1b5ce0"
-            strokeWidth="20"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <path
-            d="M-30 384 C 140 362, 246 306, 336 214 S 512 74, 690 46"
-            stroke="#8fbcff"
-            strokeWidth="2"
-            strokeDasharray="16 18"
-            fill="none"
-            opacity="0.7"
-          />
-          <text
-            x="470"
-            y="104"
-            fill="#9dc2ff"
-            fontFamily="Archivo, Helvetica, Arial, sans-serif"
-            fontSize="17"
-            fontWeight="700"
-            letterSpacing="1.5"
-            transform="rotate(-21 470 104)"
-          >
-            W LOOP 1604 N
-          </text>
-          {/* Shop marker */}
-          <circle cx="300" cy="238" r="34" fill="#1b5ce0" opacity="0.1" />
-          <path
-            d="M300 268c0 0-17-13.5-17-26.5a17 17 0 1 1 34 0c0 13-17 26.5-17 26.5Z"
-            fill="#e8ecf1"
-            stroke="#0b0f14"
-            strokeWidth="2"
-          />
-          <circle cx="300" cy="241" r="6.5" fill="#1b5ce0" />
-        </svg>
-
-        <span className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 bg-ink/88 px-4 py-3 text-[0.85rem] font-semibold backdrop-blur-sm">
-          <span className="text-bone">{business.addressLine}</span>
-          <span className="shrink-0 text-brand-lift group-hover:underline">Open in Maps</span>
-        </span>
-      </div>
-    </a>
-  );
-}
 
 function PolicyBlock({ title, body, confirm }: { title: string; body: string; confirm: boolean }) {
   return (
@@ -189,19 +105,7 @@ export function LocationHours() {
             {policies.walkIns && (
               <PolicyBlock title="Walk-in policy" body={policies.walkInNote} confirm={false} />
             )}
-            <PolicyBlock
-              title="Parking"
-              confirm={!policies.parking}
-              body={policies.parking || 'Add the shop’s parking details here (lot, entrance, and where to walk in from).'}
-            />
-            <PolicyBlock
-              title="Landmark"
-              confirm={!policies.landmark}
-              body={
-                policies.landmark ||
-                'Add the nearest cross street or the neighboring business so first-timers spot the door.'
-              }
-            />
+            <PolicyBlock title="Refunds & no-shows" confirm body={policies.refunds} />
           </div>
         </div>
       </div>

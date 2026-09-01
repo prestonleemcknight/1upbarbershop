@@ -1,39 +1,55 @@
 import { Section, SectionHeading } from '../components/ui';
+import { business } from '../data/business';
+
+const points = [
+  'Barbers who cut every day and finish every head the same way',
+  'A clean shop, sharp tools and a chair you are comfortable in',
+  'Transparent pricing — the menu is on the site, not a surprise at the counter',
+  'Walk-ins always welcome, appointments if you would rather not wait',
+  'Right on the W Loop 1604 access road in Shaenfield',
+];
 
 export default function AboutPage() {
   return (
     <Section id="about">
-      <div className="mx-auto max-w-2xl">
-        <SectionHeading id="about" title="About 1UP Barbershop" />
-        <div className="prose prose-sm max-w-none">
-          <p className="text-base leading-relaxed text-slate-700">
-            Welcome to 1UP Barbershop, your neighborhood destination for premium men's grooming.
-            Located in San Antonio, our experienced barbers are dedicated to delivering top-tier
-            haircuts, fades, and grooming services in a clean, welcoming environment.
+      <div className="mx-auto max-w-3xl">
+        <SectionHeading
+          id="about"
+          eyebrow="About"
+          title="About 1UP Barbershop"
+          lede="A neighbourhood shop on the North Side, built around getting the cut right every single visit."
+        />
+
+        <div className="mt-12 space-y-6 text-[1.05rem] leading-relaxed text-bone-2">
+          <p>
+            1UP Barbershop is a men&rsquo;s grooming shop in {business.neighborhood}, San Antonio. Fades, tapers,
+            scissor work, beards, kids cuts and loc maintenance — cut clean, finished properly, and done the same way
+            whichever chair you sit in.
           </p>
-          <p className="text-base leading-relaxed text-slate-700 mt-4">
-            We believe that a great haircut is more than just a service—it's an experience.
-            Our team takes pride in listening to your needs, understanding your style, and delivering
-            results that exceed expectations every single time.
+          <p>
+            A good haircut is not a transaction. It is ten minutes of someone actually listening to what you want,
+            then the skill to deliver it. That is the whole business.
           </p>
-          <p className="text-base leading-relaxed text-slate-700 mt-4">
-            Whether you're a regular or visiting for the first time, you'll experience the 1UP
-            difference: skilled barbers, quality products, and genuine hospitality.
+          <p>
+            Whether you are a regular or walking in for the first time, you get the same thing: a barber who takes the
+            work seriously and a shop that respects your time.
           </p>
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-3">Our Mission</h3>
-          <p className="text-base leading-relaxed text-slate-700">
-            To provide the best barbering services in San Antonio, creating a community space
-            where customers feel valued, respected, and leave looking and feeling their best.
-          </p>
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-3">Why Choose 1UP?</h3>
-          <ul className="space-y-2 text-slate-700">
-            <li>✓ Professional barbers with years of experience</li>
-            <li>✓ Clean, modern facility with quality equipment</li>
-            <li>✓ Competitive pricing with transparent rates</li>
-            <li>✓ Walk-ins welcome • Appointments available</li>
-            <li>✓ Convenient location near Loop 1604</li>
-          </ul>
         </div>
+
+        <h3 className="display-xl mt-16 text-[clamp(1.5rem,4vw,2.2rem)]">What you can hold us to</h3>
+        <ul className="mt-8 divide-y divide-hairline border-y border-hairline">
+          {points.map((point, i) => (
+            <li key={point} className="flex gap-5 py-5">
+              <span
+                aria-hidden
+                className="mt-0.5 shrink-0 text-[0.8rem] font-extrabold tabular-nums tracking-[0.12em] text-brand-lift"
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="text-[1rem] leading-relaxed text-bone-2">{point}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </Section>
   );
