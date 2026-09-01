@@ -1,6 +1,7 @@
 import { barbers, barberPlaceholderImages, bookLabel, bookingReady } from '../data/business';
 import { BookButton, Code, EditorNote, NeedsInfo, Reveal, Section, SectionHeading, buttonGhostDark, buttonPrimary } from './ui';
 import { InstagramIcon } from './Icons';
+import { asset } from '../lib/asset';
 
 /** Shown until real barber names, specialties, bios and photos are supplied. */
 function BarberPlaceholders() {
@@ -16,7 +17,7 @@ function BarberPlaceholders() {
         {barberPlaceholderImages.map((src, i) => (
           <Reveal key={src} as="li" delay={i * 70} className="overflow-hidden rounded-[4px] border border-hairline bg-ink-2">
               <img
-                src={src}
+                src={asset(src)}
                 alt=""
                 width={900}
                 height={900}
@@ -55,7 +56,7 @@ export function Barbers() {
           {barbers.map((barber, i) => (
             <Reveal key={barber.name} as="li" delay={i * 70} className="flex h-full flex-col overflow-hidden rounded-[4px] border border-hairline bg-ink">
                 <img
-                  src={barber.image}
+                  src={asset(barber.image)}
                   alt={barber.imageAlt}
                   width={900}
                   height={900}

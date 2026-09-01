@@ -1,10 +1,20 @@
+import { useState } from 'react';
 import { business, bookLabelLong, hours, policies, ratingInfo } from '../data/business';
 import { formatRange } from '../lib/hours';
+import { asset } from '../lib/asset';
 import { useShopStatus } from '../lib/useShopClock';
-import { BookButton, buttonGhostDark, buttonPrimary } from './ui';
+import { BookButton, buttonGhostDark } from './ui';
 import { ClockIcon, PinIcon, StarIcon, WalkInIcon } from './Icons';
+import { Logo } from './Logo';
 
-/** Reads the live open/closed state after hydration; the prerendered HTML shows general hours. */
+/**
+ * The shop floor photo. Drop the real file at this path and it appears — until
+ * then the image is dropped entirely and the section falls back to flat ink,
+ * which reads as a deliberate dark hero rather than a broken placeholder.
+ */
+const HERO_PHOTO = '/images/1up-barbershop-hero-interior.jpg';
+
+/** Reads the live open/closed state after hydration; the static HTML shows general hours. */
 function TodayStatus() {
   const status = useShopStatus();
   const weekdays = hours.find((h) => h.dayIndex === 1);
@@ -21,52 +31,74 @@ function TodayStatus() {
   );
 }
 
-export function Hero() {
+/** Centred flourish under the headline. */
+function Flourish() {
   return (
-    <section id="top" className="relative isolate overflow-hidden bg-ink">
+    <div aria-hidden className="mt-9 flex items-center justify-center gap-3">
+      <span className="h-px w-16 bg-[linear-gradient(90deg,transparent,var(--color-hairline))] sm:w-24" />
+      <svg viewBox="0 0 12 12" className="h-2.5 w-2.5 text-brand-lift" fill="currentColor">
+        <path d="M6 0l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" />
+      </svg>
+      <span className="h-px w-16 bg-[linear-gradient(270deg,transparent,var(--color-hairline))] sm:w-24" />
+    </div>
+  );
+}
+
+export function Hero() {
+  const [hasPhoto, setHasPhoto] = useState(true);
+
+  return (
+    /* Pulled up under the sticky header so the photo runs behind the nav, then
+       padded back down so the content clears it. Header is 72px, 108px at lg. */
+    <section
+      id="top"
+      className="relative isolate -mt-[72px] flex min-h-[92svh] flex-col overflow-hidden bg-ink pt-[72px] lg:-mt-[108px] lg:pt-[108px]"
+    >
       {/* Hero image: eager + high priority, it is the LCP element. */}
-      <img
-        src="/images/1up-barbershop-shop-floor-shaenfield-san-antonio.svg"
-        alt="Barber chairs and stations on the floor at 1UP Barbershop in San Antonio"
-        width={1600}
-        height={900}
-        fetchPriority="high"
-        decoding="async"
-        className="absolute inset-0 -z-20 h-full w-full object-cover opacity-55"
-      />
+      {hasPhoto && (
+        <img
+          src={asset(HERO_PHOTO)}
+          onError={() => setHasPhoto(false)}
+          alt="The floor at 1UP Barbershop in San Antonio — barber chairs, stations and hexagon lighting"
+          width={1600}
+          height={900}
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+        />
+      )}
+      {/* Darkened so the wordmark and headline stay legible over any photo. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(11,15,20,0.72)_0%,rgba(11,15,20,0.86)_55%,var(--color-ink)_100%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_50%_38%,rgba(11,15,20,0.55)_0%,rgba(11,15,20,0.82)_55%,var(--color-ink)_100%)]"
       />
       <div aria-hidden className="texture-grit absolute inset-0 -z-10" />
 
-      <div className="mx-auto w-full max-w-7xl px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-24 md:pb-28 md:pt-32 xl:pb-32 xl:pt-40">
-        <p className="eyebrow flex flex-wrap items-center gap-x-3 gap-y-2 text-brand-lift">
-          <span>Barbershop in {business.neighborhood}</span>
-          <span aria-hidden className="hidden h-3 w-px bg-hairline sm:block" />
+      <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-20 text-center sm:px-8 sm:py-24 md:py-28">
+        <Logo className="h-[clamp(6rem,15vw,10.5rem)] w-[clamp(6rem,15vw,10.5rem)]" title="1UP Barbershop" />
+
+        <p className="eyebrow mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-brand-lift">
+          <span>{business.neighborhood}</span>
+          <span aria-hidden className="h-3 w-px bg-hairline" />
           <span>San Antonio, TX</span>
         </p>
 
-        <h1 className="display-xl mt-5 max-w-[19ch] text-[clamp(2.35rem,8.4vw,5.6rem)]">
-          Precision fades on{' '}
-          <span className="text-brand-lift">W&nbsp;Loop 1604</span>, seven days a week.
+        <h1 className="display-xl mt-5 max-w-[17ch] text-[clamp(2.3rem,6.6vw,4.6rem)]">
+          Precision fades on <span className="text-brand-lift">W&nbsp;Loop&nbsp;1604</span>, seven days a week.
         </h1>
 
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone-2 sm:text-xl">
-          Fades, tapers, beards, kids cuts and loc maintenance — cut clean and finished the same way
-          every visit. Walk in, or lock in your chair ahead of time.
-        </p>
+        <Flourish />
 
-        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <BookButton className={`${buttonPrimary} w-full !min-h-[56px] !text-base sm:w-auto`}>
+        <div className="mt-9 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
+          <BookButton className={`${buttonGhostDark} w-full !min-h-[58px] !px-10 !text-base sm:w-auto`}>
             {bookLabelLong}
           </BookButton>
-          <a href="#services" className={`${buttonGhostDark} w-full !min-h-[56px] sm:w-auto`}>
-            View Services
-          </a>
         </div>
+      </div>
 
-        <dl className="mt-12 grid gap-x-8 gap-y-5 border-t border-hairline pt-8 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Local proof, kept on the first screen — it is why a neighbourhood shop converts. */}
+      <div className="relative mx-auto w-full max-w-7xl px-5 pb-14 sm:px-8">
+        <dl className="grid gap-x-8 gap-y-5 border-t border-hairline pt-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <dt className="eyebrow text-muted">Address</dt>
             <dd className="mt-1.5 flex items-start gap-2 text-[0.95rem] font-semibold text-bone">

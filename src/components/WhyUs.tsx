@@ -1,5 +1,6 @@
 import { differentiators } from '../data/content';
 import { Reveal, Section, SectionHeading } from './ui';
+import { asset } from '../lib/asset';
 
 export function WhyUs() {
   return (
@@ -35,7 +36,7 @@ export function WhyUs() {
         <Reveal className="lg:pt-8">
           <figure className="overflow-hidden rounded-[4px] bg-ink">
             <img
-              src="/images/1up-barbershop-interior-barber-chairs.svg"
+              src={asset('/images/1up-barbershop-interior-barber-chairs.svg')}
               alt="Station, mirror and tools at 1UP Barbershop"
               width={1200}
               height={900}

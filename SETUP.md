@@ -75,7 +75,31 @@ from clients before posting their cut.
 
 ## 5. Photography — how to swap a placeholder
 
-Every image in `public/images/` is a generated placeholder that says
+### The front-page hero photo (do this one first)
+
+The home page is built around one full-bleed shop photo behind the centred
+logo. It is the single highest-impact image on the site.
+
+**Save the shop-floor photo to exactly this path:**
+
+```
+public/images/1up-barbershop-hero-interior.jpg
+```
+
+That is all — no code change. The hero looks for that file and uses it the
+moment it exists; until then it drops the image and renders as a flat dark
+hero, so nothing looks broken in the meantime.
+
+Shoot/export notes: landscape, around 1600–2400 px wide, under ~400 kB.
+The headline sits centred over the middle of the frame and a dark scrim is
+applied on top, so a photo with a busy or bright centre still reads fine —
+but one with some depth toward the edges (chairs, stations, lighting) looks
+best. A `.webp` works too; if you use one, change `HERO_PHOTO` at the top of
+`src/components/Hero.tsx` to match the extension.
+
+### Everything else
+
+Every other image in `public/images/` is a generated placeholder that says
 **PHOTO PLACEHOLDER** on it, with a note about which shot belongs there.
 
 To replace one:
@@ -106,6 +130,8 @@ everything after that makes it better.
 - [ ] Fill in all 10 service durations
 - [ ] Add every barber: name, specialty, bio, working days, booking link, Instagram
       (owners are @brandowontmiss and @ej.fades — real names needed)
+- [ ] Drop the shop-floor photo at `public/images/1up-barbershop-hero-interior.jpg`
+      (front-page hero — no code change needed, see section 5)
 - [ ] Export the real logo and swap out the stand-in badge in `src/components/Logo.tsx`
 - [ ] Shoot and drop in 13 photos (see section 4)
 - [ ] Paste 3 real Google reviews with reviewer first names

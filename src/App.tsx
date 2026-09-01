@@ -13,7 +13,8 @@ import SocialsPage from './pages/Socials';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    /* basename keeps routes matching under the GitHub Pages sub-path. */
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-[4px] focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-white"

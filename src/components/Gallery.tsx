@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { business, gallery, galleryCategories, type GalleryItem } from '../data/business';
 import { Code, EditorNote, Section, SectionHeading, buttonGhostDark } from './ui';
 import { CloseIcon, InstagramIcon } from './Icons';
+import { asset } from '../lib/asset';
 
 type Filter = 'All' | (typeof galleryCategories)[number];
 const filters: Filter[] = ['All', ...galleryCategories];
@@ -84,7 +85,7 @@ function Lightbox({
 
       <div className="flex min-h-0 flex-1 items-center justify-center py-4">
         <img
-          src={item.src}
+          src={asset(item.src)}
           alt={item.alt}
           width={item.width}
           height={item.height}
@@ -180,7 +181,7 @@ export function Gallery() {
               className="group block w-full overflow-hidden rounded-[4px] border border-hairline bg-ink-2 transition-colors hover:border-brand-lift"
             >
               <img
-                src={item.src}
+                src={asset(item.src)}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
