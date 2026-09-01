@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { business, bookLabel } from '../data/business';
 import { BookButton, buttonPrimary } from './ui';
 import { CloseIcon, PhoneIcon } from './Icons';
 import { Logo } from './Logo';
 
-/** Split either side of the centred mark, three and three. */
+/** Split either side of the centred mark, four and four. */
 const navLeft = [
-  { href: '#services', label: 'Services' },
-  { href: '#barbers', label: 'Barbers' },
-  { href: '#gallery', label: 'Gallery' },
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
+  { href: '/location', label: 'Location' },
 ];
 
 const navRight = [
-  { href: '#reviews', label: 'Reviews' },
-  { href: '#location', label: 'Location' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/employment', label: 'Employment' },
+  { href: '/socials', label: 'Socials' },
+  { href: '/book', label: 'Book' },
 ];
 
 const allLinks = [...navLeft, ...navRight];
@@ -25,11 +28,11 @@ const linkClass =
 /** The centred mark, used by both the desktop and the mobile row. */
 function Brand({ className = '' }: { className?: string }) {
   return (
-    <a href="#top" className={`group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone ${className}`}>
+    <Link to="/" className={`group flex min-h-[44px] shrink-0 items-center gap-2.5 text-bone ${className}`}>
       <Logo className="h-10 w-10 shrink-0" />
       <span className="sr-only">1UP</span>{' '}
       <span className="hidden text-[0.95rem] font-extrabold uppercase tracking-[0.14em] sm:block">Barbershop</span>
-    </a>
+    </Link>
   );
 }
 
@@ -97,9 +100,9 @@ export function Header() {
         <ul className="flex items-center justify-start gap-1">
           {navLeft.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className={linkClass}>
+              <Link to={link.href} className={linkClass}>
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -112,9 +115,9 @@ export function Header() {
           <ul className="flex items-center gap-1">
             {navRight.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className={linkClass}>
+                <Link to={link.href} className={linkClass}>
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -162,13 +165,13 @@ export function Header() {
           <ul className="flex flex-col">
             {allLinks.map((link) => (
               <li key={link.href} className="border-b border-hairline/60 last:border-0">
-                <a
-                  href={link.href}
+                <Link
+                  to={link.href}
                   onClick={() => setOpen(false)}
                   className="flex min-h-[52px] items-center text-[0.95rem] font-semibold uppercase tracking-[0.1em] text-bone"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
