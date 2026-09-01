@@ -1,19 +1,9 @@
-import { useState } from 'react';
 import { business, bookLabelLong, hours, policies, ratingInfo, reviews, reviewsReady } from '../data/business';
 import { formatRange } from '../lib/hours';
-import { asset } from '../lib/asset';
 import { useShopStatus } from '../lib/useShopClock';
 import { BookButton, buttonGhostDark } from './ui';
 import { ClockIcon, PinIcon, StarIcon, WalkInIcon } from './Icons';
 import { Logo } from './Logo';
-
-/**
- * The shop floor photo. Drop the real file at this path and it appears — until
- * then the image is dropped entirely and the section falls back to flat ink,
- * which reads as a deliberate dark hero rather than a broken placeholder.
- */
-const HERO_PHOTO = '/images/1up-barbershop-chairs.jpg';
-const HERO_PHOTO_WEBP = '/images/1up-barbershop-chairs.webp';
 
 /** Reads the live open/closed state after hydration; the static HTML shows general hours. */
 function TodayStatus() {
@@ -46,35 +36,22 @@ function Flourish() {
 }
 
 export function Hero() {
-  const [hasPhoto, setHasPhoto] = useState(true);
-
   return (
-    /* Pulled up under the sticky header so the photo runs behind the nav, then
-       padded back down so the content clears it. The header is a uniform 108px (36px promo strip + 72px nav). */
+    /* Pulled up under the sticky header so the backdrop runs behind the nav,
+       then padded back down so the content clears it. The header is a uniform
+       108px (36px promo strip + 72px nav). */
     <section
       id="top"
       className="relative isolate -mt-[108px] flex min-h-[94svh] flex-col overflow-hidden bg-ink pt-[108px]"
     >
-      {/* Hero image: eager + high priority, it is the LCP element. */}
-      {hasPhoto && (
-        <picture>
-          <source srcSet={asset(HERO_PHOTO_WEBP)} type="image/webp" />
-          <img
-            src={asset(HERO_PHOTO)}
-            onError={() => setHasPhoto(false)}
-            alt="The floor at 1UP Barbershop in San Antonio — barber chairs, stations and hexagon lighting"
-            width={2000}
-            height={1116}
-            fetchPriority="high"
-            decoding="async"
-            className="absolute inset-0 -z-20 h-full w-full object-cover"
-          />
-        </picture>
-      )}
-      {/* Darkened so the wordmark and headline stay legible over any photo. */}
+      {/* Oversized mark behind the content, matching the inner pages. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 flex items-center justify-center">
+        <Logo className="w-[min(150vw,80rem)] max-w-none opacity-[0.055]" />
+      </div>
+      {/* Keeps the edges dark so the headline holds against the mark behind it. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_50%_38%,rgba(11,15,20,0.55)_0%,rgba(11,15,20,0.82)_55%,var(--color-ink)_100%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_50%_42%,transparent_0%,rgba(11,15,20,0.55)_60%,var(--color-ink)_100%)]"
       />
       <div aria-hidden className="texture-grit absolute inset-0 -z-10" />
 
