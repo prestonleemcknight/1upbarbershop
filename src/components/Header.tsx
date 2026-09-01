@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { business, bookLabel } from '../data/business';
-import { BookButton, buttonPrimary } from './ui';
+import { buttonPrimary } from './ui';
+import { useBooking } from '../lib/booking';
 import { CloseIcon, PhoneIcon } from './Icons';
 import { Logo } from './Logo';
 
-/** Split either side of the centred mark, four and four. */
+/** Split either side of the centred mark. Booking is the blue button, not a link. */
 const navLeft = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
@@ -17,7 +18,6 @@ const navRight = [
   { href: '/contact', label: 'Contact' },
   { href: '/employment', label: 'Employment' },
   { href: '/socials', label: 'Socials' },
-  { href: '/book', label: 'Book' },
 ];
 
 const allLinks = [...navLeft, ...navRight];
@@ -37,6 +37,7 @@ function Brand({ className = '' }: { className?: string }) {
 }
 
 export function Header() {
+  const { open: openBooking } = useBooking();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -130,13 +131,14 @@ export function Header() {
               </li>
             ))}
           </ul>
-          <BookButton
+          <button
+            type="button"
+            onClick={openBooking}
             className={`${buttonPrimary} ml-2 !px-5 !text-[0.8rem] whitespace-nowrap`}
-            withArrow={false}
-            label={bookLabel}
+            aria-label={bookLabel}
           >
             Book
-          </BookButton>
+          </button>
         </div>
       </nav>
 
@@ -145,9 +147,9 @@ export function Header() {
         <Brand />
         <div className="flex items-center gap-2">
           <span className="hidden sm:block">
-            <BookButton className={`${buttonPrimary} !px-5 !text-[0.8rem]`} withArrow={false}>
+            <button type="button" onClick={openBooking} className={`${buttonPrimary} !px-5 !text-[0.8rem]`}>
               {bookLabel}
-            </BookButton>
+            </button>
           </span>
           <button
             ref={toggleRef}
@@ -192,9 +194,16 @@ export function Header() {
               <PhoneIcon className="h-[18px] w-[18px]" />
               {business.phoneDisplay}
             </a>
-            <BookButton className={buttonPrimary} withArrow={false}>
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                openBooking();
+              }}
+              className={buttonPrimary}
+            >
               {bookLabel}
-            </BookButton>
+            </button>
           </div>
         </nav>
       </div>

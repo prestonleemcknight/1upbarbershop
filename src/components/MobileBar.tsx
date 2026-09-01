@@ -1,9 +1,11 @@
 import { business, bookLabel } from '../data/business';
-import { BookButton } from './ui';
+import { useBooking } from '../lib/booking';
 import { PhoneIcon } from './Icons';
 
 /** Compact, always-reachable Call + Book bar on small screens. */
 export function MobileBar() {
+  const { open: openBooking } = useBooking();
+
   return (
     <nav
       aria-label="Quick actions"
@@ -20,12 +22,13 @@ export function MobileBar() {
           <PhoneIcon className="h-[18px] w-[18px]" />
           Call
         </a>
-        <BookButton
+        <button
+          type="button"
+          onClick={openBooking}
           className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-[4px] bg-brand px-4 text-[0.92rem] font-bold uppercase tracking-[0.08em] text-white"
-          withArrow={false}
         >
           {bookLabel}
-        </BookButton>
+        </button>
       </div>
     </nav>
   );
