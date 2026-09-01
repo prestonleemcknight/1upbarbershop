@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   chairRoster,
   chairHotspots,
@@ -14,15 +14,24 @@ import { PhoneIcon } from './Icons';
 const SHOP_PHOTO = '/images/1up-barbershop-chairs.jpg';
 const SHOP_PHOTO_WEBP = '/images/1up-barbershop-chairs.webp';
 
-/** Half the popover width, used to keep it inside the photo at either edge. */
-const POP_HALF = '8.5rem';
-
 export function ChairPicker() {
   const [selected, setSelected] = useState<number | null>(null);
   const [hasPhoto, setHasPhoto] = useState(true);
+  const panelRef = useRef<HTMLDivElement>(null);
   const active = selected === null ? null : chairRoster[selected];
 
-  // Escape closes the open card.
+  /* Bring the panel into view as soon as a barber is picked, so the details
+     are never left off-screen below a tall photo. Honours reduced motion. */
+  useEffect(() => {
+    if (selected === null) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    panelRef.current?.scrollIntoView({
+      behavior: reduce ? 'auto' : 'smooth',
+      block: 'center',
+    });
+  }, [selected]);
+
+  // Escape clears the selection.
   useEffect(() => {
     if (selected === null) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setSelected(null);
@@ -68,6 +77,7 @@ export function ChairPicker() {
                 type="button"
                 onClick={() => setSelected(isOpen ? null : i)}
                 aria-expanded={isOpen}
+                aria-controls="barber-detail"
                 style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
                 className={`absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[0.7rem] font-extrabold shadow-[0_2px_10px_rgba(0,0,0,0.5)] transition-all hover:z-30 hover:scale-125 focus-visible:z-30 focus-visible:scale-125 lg:h-9 lg:w-9 lg:text-[0.8rem] ${
                   isOpen
@@ -80,72 +90,6 @@ export function ChairPicker() {
               </button>
             );
           })}
-
-          {/* The card, anchored under its marker and clamped inside the photo. */}
-          {active && selected !== null && (
-            <div
-              role="dialog"
-              aria-label={`${active.name} details`}
-              style={{
-                left: `clamp(${POP_HALF}, ${chairHotspots[selected].x}%, calc(100% - ${POP_HALF}))`,
-                top: `calc(${chairHotspots[selected].y}% + 1.6rem)`,
-              }}
-              className="absolute z-40 w-[17rem] -translate-x-1/2 rounded-[6px] border border-brand/60 bg-ink/95 p-4 shadow-[0_10px_40px_rgba(0,0,0,0.65)] backdrop-blur-md"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-brand-lift">
-                    Chair {selected + 1}
-                  </p>
-                  <p className="mt-0.5 truncate text-[1.05rem] font-extrabold text-bone">{active.name}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelected(null)}
-                  aria-label="Close"
-                  className="-mr-1 -mt-1 shrink-0 rounded p-1 text-muted transition-colors hover:text-bone"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden focusable="false">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
-                  </svg>
-                </button>
-              </div>
-
-              <dl className="mt-3 space-y-2 border-t border-hairline pt-3 text-[0.82rem]">
-                <div>
-                  <dt className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-muted">Phone</dt>
-                  <dd className="mt-0.5">
-                    <a
-                      href={active.phone ? `tel:${active.phone}` : business.phoneHref}
-                      className="inline-flex items-center gap-1.5 font-semibold text-bone hover:text-brand-lift"
-                    >
-                      <PhoneIcon className="h-[14px] w-[14px]" />
-                      {active.phone ?? business.phoneDisplay}
-                    </a>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-muted">Email</dt>
-                  <dd className="mt-0.5">
-                    <a
-                      href={`mailto:${active.email ?? business.email}`}
-                      className="break-all font-semibold text-bone hover:text-brand-lift"
-                    >
-                      {active.email ?? business.email}
-                    </a>
-                  </dd>
-                </div>
-              </dl>
-
-              <a
-                href={active.bookingUrl || bookHref}
-                {...(active.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : bookLinkProps)}
-                className="mt-4 flex min-h-[42px] items-center justify-center rounded-[4px] bg-brand text-[0.78rem] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-deep"
-              >
-                {bookingReady || active.bookingUrl ? 'Book on Booksy' : 'Booksy — call to book'}
-              </a>
-            </div>
-          )}
         </div>
       </div>
 
@@ -154,6 +98,64 @@ export function ChairPicker() {
         <span className="sm:hidden"> Swipe the photo to reach them all.</span>
         {rosterIsDemo && ' Names are placeholders until the real roster is added.'}
       </p>
+
+      {/* The picked barber's details, directly under the photo. */}
+      <div ref={panelRef} id="barber-detail" className="scroll-mt-32">
+        {active && selected !== null && (
+          <div className="mt-6 rounded-[6px] border border-brand/50 bg-ink-2 p-6 sm:p-8">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="eyebrow text-brand-lift">Chair {selected + 1}</p>
+                <h3 className="display-xl mt-1 text-[clamp(1.5rem,4vw,2.1rem)]">{active.name}</h3>
+                {active.specialty && <p className="mt-2 text-[0.95rem] text-muted">{active.specialty}</p>}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="rounded-[4px] border border-hairline px-3 py-2 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-muted transition-colors hover:text-bone"
+              >
+                Close
+              </button>
+            </div>
+
+            {active.bio && <p className="mt-4 max-w-prose text-[0.98rem] leading-relaxed text-bone-2">{active.bio}</p>}
+
+            <dl className="mt-6 grid gap-5 border-t border-hairline pt-6 sm:grid-cols-2">
+              <div>
+                <dt className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-muted">Phone</dt>
+                <dd className="mt-1">
+                  <a
+                    href={active.phone ? `tel:${active.phone}` : business.phoneHref}
+                    className="inline-flex items-center gap-2 text-[1.05rem] font-semibold text-bone transition-colors hover:text-brand-lift"
+                  >
+                    <PhoneIcon className="h-[17px] w-[17px]" />
+                    {active.phone ?? business.phoneDisplay}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-muted">Email</dt>
+                <dd className="mt-1">
+                  <a
+                    href={`mailto:${active.email ?? business.email}`}
+                    className="break-all text-[1.05rem] font-semibold text-bone transition-colors hover:text-brand-lift"
+                  >
+                    {active.email ?? business.email}
+                  </a>
+                </dd>
+              </div>
+            </dl>
+
+            <a
+              href={active.bookingUrl || bookHref}
+              {...(active.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : bookLinkProps)}
+              className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-[4px] bg-brand text-[0.85rem] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-deep sm:w-auto sm:px-10"
+            >
+              {bookingReady || active.bookingUrl ? 'Book on Booksy' : 'Booksy — call to book'}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
