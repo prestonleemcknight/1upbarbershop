@@ -56,7 +56,7 @@ export default function EmploymentPage() {
             {requirements.map((item) => (
               <li key={item} className="flex gap-3 text-[0.98rem] leading-relaxed text-bone-2">
                 <span aria-hidden className="mt-[0.15em] shrink-0 font-bold text-brand-lift">
-                  &check;
+                  ✓
                 </span>
                 {item}
               </li>

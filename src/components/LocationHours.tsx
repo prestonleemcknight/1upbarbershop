@@ -79,6 +79,14 @@ export function LocationHours() {
               <PhoneIcon className="h-[18px] w-[18px]" />
               {business.phoneDisplay}
             </a>
+            {business.email && (
+              <a
+                href={`mailto:${business.email}`}
+                className="mt-1 block text-[1rem] font-semibold text-brand-lift hover:underline"
+              >
+                {business.email}
+              </a>
+            )}
           </address>
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">

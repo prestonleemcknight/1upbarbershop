@@ -64,7 +64,7 @@ export default function BookPage() {
             ].map((item) => (
               <li key={item} className="flex gap-3 text-[0.96rem] leading-relaxed text-bone-2">
                 <span aria-hidden className="mt-[0.15em] shrink-0 font-bold text-brand-lift">
-                  &check;
+                  ✓
                 </span>
                 {item}
               </li>
