@@ -75,45 +75,21 @@ from clients before posting their cut.
 
 ## 5. Photography — how to swap a placeholder
 
-### The front-page hero photo (do this one first)
+### The shop photo — done
 
-The home page is built around one full-bleed shop photo behind the centred
-logo. It is the single highest-impact image on the site.
+The team photo is in and doing two jobs: the full-bleed background on the home
+page, and the clickable barber picker on the home and Contact pages. It lives
+at `public/images/1up-barbershop-chairs.jpg` with a `.webp` beside it, and the
+page serves the WebP to browsers that take it.
 
-**Save the shop-floor photo to exactly this path:**
+**If you ever swap it for a different photo**, overwrite both files and then
+re-check `chairHotspots` in `src/data/business.ts` — that array holds the x/y
+percentage for each of the ten markers, positioned just above each person's
+head in the current shot. Marker 1 is chair 1, down to marker 10.
 
-```
-public/images/1up-barbershop-hero-interior.jpg
-```
-
-That is all — no code change. The hero looks for that file and uses it the
-moment it exists; until then it drops the image and renders as a flat dark
-hero, so nothing looks broken in the meantime.
-
-Shoot/export notes: landscape, around 1600–2400 px wide, under ~400 kB.
-The headline sits centred over the middle of the frame and a dark scrim is
-applied on top, so a photo with a busy or bright centre still reads fine —
-but one with some depth toward the edges (chairs, stations, lighting) looks
-best. A `.webp` works too; if you use one, change `HERO_PHOTO` at the top of
-`src/components/Hero.tsx` to match the extension.
-
-### The chair-picker photo
-
-The "Choose a Barber" / "Meet Our Barbers" picker shows the shop photo with a
-numbered marker on each barber. Save it to:
-
-```
-public/images/1up-barbershop-chairs.jpg
-```
-
-Without the file the photo is skipped and the chair list below it still works,
-so the page is never broken.
-
-**The markers will need nudging.** Their positions live in `chairHotspots` in
-`src/data/business.ts` as x/y percentages of the image box, currently set to a
-plausible arc. Load the page, see where each numbered marker lands, and adjust
-the numbers until each one sits on the right person. Marker 1 is chair 1, and
-so on down the list.
+Keep replacements around 2000 px wide and under ~350 kB. The original upload
+was a 7.2 MB PNG; shipping that would have cost several seconds on a phone, so
+it was re-encoded and the PNG removed from the working tree.
 
 ### Everything else
 

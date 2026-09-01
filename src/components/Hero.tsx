@@ -12,7 +12,8 @@ import { Logo } from './Logo';
  * then the image is dropped entirely and the section falls back to flat ink,
  * which reads as a deliberate dark hero rather than a broken placeholder.
  */
-const HERO_PHOTO = '/images/1up-barbershop-hero-interior.jpg';
+const HERO_PHOTO = '/images/1up-barbershop-chairs.jpg';
+const HERO_PHOTO_WEBP = '/images/1up-barbershop-chairs.webp';
 
 /** Reads the live open/closed state after hydration; the static HTML shows general hours. */
 function TodayStatus() {
@@ -56,16 +57,19 @@ export function Hero() {
     >
       {/* Hero image: eager + high priority, it is the LCP element. */}
       {hasPhoto && (
-        <img
-          src={asset(HERO_PHOTO)}
-          onError={() => setHasPhoto(false)}
-          alt="The floor at 1UP Barbershop in San Antonio — barber chairs, stations and hexagon lighting"
-          width={1600}
-          height={900}
-          fetchPriority="high"
-          decoding="async"
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
-        />
+        <picture>
+          <source srcSet={asset(HERO_PHOTO_WEBP)} type="image/webp" />
+          <img
+            src={asset(HERO_PHOTO)}
+            onError={() => setHasPhoto(false)}
+            alt="The floor at 1UP Barbershop in San Antonio — barber chairs, stations and hexagon lighting"
+            width={2000}
+            height={1116}
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 -z-20 h-full w-full object-cover"
+          />
+        </picture>
       )}
       {/* Darkened so the wordmark and headline stay legible over any photo. */}
       <div

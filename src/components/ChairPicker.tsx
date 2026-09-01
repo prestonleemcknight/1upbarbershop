@@ -14,6 +14,7 @@ import { PhoneIcon } from './Icons';
 
 /** The shop photo the markers sit on. Optional — the list below works without it. */
 const SHOP_PHOTO = '/images/1up-barbershop-chairs.jpg';
+const SHOP_PHOTO_WEBP = '/images/1up-barbershop-chairs.webp';
 
 function ChairIcon({ className = '' }: { className?: string }) {
   return (
@@ -38,16 +39,23 @@ export function ChairPicker() {
       {/* The photo, with a marker on each barber. */}
       {hasPhoto && (
         <div className="relative isolate overflow-hidden rounded-[6px] border border-hairline bg-ink-2">
-          <img
-            src={asset(SHOP_PHOTO)}
-            onError={() => setHasPhoto(false)}
-            alt="The floor at 1UP Barbershop — tap a barber to see their details"
-            loading="lazy"
-            decoding="async"
-            className="block w-full"
-          />
-          <div aria-hidden className="absolute inset-0 bg-ink/25" />
+          <picture>
+            <source srcSet={asset(SHOP_PHOTO_WEBP)} type="image/webp" />
+            <img
+              src={asset(SHOP_PHOTO)}
+              onError={() => setHasPhoto(false)}
+              alt="The floor at 1UP Barbershop — the team at their chairs"
+              width={2000}
+              height={1116}
+              loading="lazy"
+              decoding="async"
+              className="block w-full"
+            />
+          </picture>
 
+          {/* Markers sit on faces, so they are rings until picked — the face
+              stays visible through them. Hidden on the narrowest screens,
+              where they would overlap; the list below is the target there. */}
           {chairRoster.map((barber, i) => {
             const spot = chairHotspots[i];
             if (!spot) return null;
@@ -60,10 +68,10 @@ export function ChairPicker() {
                 aria-expanded={isOpen}
                 aria-controls="chair-detail"
                 style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                className={`absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[0.8rem] font-extrabold shadow-lg transition-transform hover:scale-110 focus-visible:scale-110 ${
+                className={`absolute hidden h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[0.7rem] font-extrabold shadow-[0_2px_10px_rgba(0,0,0,0.5)] transition-all hover:z-20 hover:scale-125 focus-visible:z-20 focus-visible:scale-125 sm:flex lg:h-9 lg:w-9 lg:text-[0.8rem] ${
                   isOpen
-                    ? 'border-brand-lift bg-brand text-white'
-                    : 'border-white/80 bg-ink/80 text-bone backdrop-blur-sm hover:bg-brand'
+                    ? 'z-20 scale-125 border-white bg-brand text-white'
+                    : 'z-10 border-white/90 bg-ink/35 text-white backdrop-blur-[1px] hover:bg-brand'
                 }`}
               >
                 <span className="sr-only">Show details for {barber.name}</span>

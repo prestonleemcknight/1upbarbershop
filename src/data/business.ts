@@ -293,20 +293,23 @@ export const demoChairs: Barber[] = Array.from({ length: chairCount }, (_, i) =>
 
 /**
  * Where each barber stands in the shop photo, as a percentage of the image
- * box. These are placed by eye against the shop photo — nudge x/y here until
- * each marker sits on the right person. Order matches `chairRoster`.
+ * box. Read off the actual photo: five along the left row, five along the
+ * right, each sitting just above that person's head so faces stay clear.
+ * Order matches `chairRoster`, so marker 1 is chair 1.
  */
 export const chairHotspots: { x: number; y: number }[] = [
-  { x: 12, y: 62 },
-  { x: 24, y: 55 },
-  { x: 35, y: 50 },
-  { x: 45, y: 47 },
-  { x: 54, y: 45 },
-  { x: 63, y: 47 },
-  { x: 72, y: 50 },
-  { x: 81, y: 55 },
-  { x: 89, y: 61 },
-  { x: 96, y: 68 },
+  // Left row, front to back.
+  { x: 18.3, y: 33.5 },
+  { x: 27.3, y: 34.8 },
+  { x: 33.6, y: 35.7 },
+  { x: 37.4, y: 38.1 },
+  { x: 40.7, y: 38.1 },
+  // Right row, back to front.
+  { x: 64.6, y: 37.9 },
+  { x: 67.5, y: 37.0 },
+  { x: 71.0, y: 36.1 },
+  { x: 78.1, y: 34.8 },
+  { x: 85.0, y: 30.3 },
 ];
 
 /** Real roster when it exists, stand-ins until then. */
